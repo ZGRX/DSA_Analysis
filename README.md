@@ -194,6 +194,6 @@ MIT License
 ## 联系方式
 
 - **项目路径**: `f:\DSA_Analysis-main\DSA_Analysis-main\`
-- **GitHub**: [suryxin001204/DSA_Analysis-main](https://github.com/suryxin001204/DSA_Analysis-main)
 - **维护者**: DSA Analysis Team
 - **最后更新**: 2025-11-28
+
