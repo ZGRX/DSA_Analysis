@@ -1,419 +1,199 @@
-<<<<<<< HEAD
-# DSA脑血流灌注分析系统 - 重构版本
+# DSA脑血流灌注分析系统 - 模块化重构
 
-## 项目说明
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2024b-orange.svg)](https://www.mathworks.com/products/matlab.html)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-这是DSA_Analysis_GUI_v5.m的重构版本，将原来3000多行的单文件代码拆分成多个模块化文件，提高了代码的可维护性和可读性。
+## 项目概述
 
-## 文件结构
+本项目将原 `DSA_Analysis_GUI_v5.m` (3443行) 单一文件重构为模块化架构，提高代码可维护性、可扩展性和团队协作效率。
 
-```
-DSA_Refactored/
-│
-├── DSA_Analysis_GUI_Refactored.m     # 主入口文件 (约100行)
-│
-└── modules/                          # 功能模块目录
-    ├── getPatientInformation.m       # 患者信息输入模块
-    ├── UIBuilder.m                   # UI构建模块
-    ├── LogManager.m                  # 日志管理模块
-    ├── initializeDataContainer.m     # 数据初始化模块
-    ├── FrameControl.m                # 帧控制模块 (待创建)
-    ├── ROIProcessor.m                # ROI处理模块 (待创建)
-    ├── TDCExtractor.m                # TDC提取模块 (待创建)
-    ├── DataImporter.m                # 数据导入模块 (待创建)
-    ├── DataExporter.m                # 数据导出模块 (待创建)
-    └── AnalysisEngine.m              # 分析引擎模块 (待创建)
-```
-
-## 模块功能说明
-
-### 1. **主入口 (DSA_Analysis_GUI_Refactored.m)**
-   - 初始化系统
-   - 调用各个模块
-   - 创建主窗口
-   - 布局管理
-
-### 2. **患者信息模块 (getPatientInformation.m)**
-   - 显示患者信息输入对话框
-   - 验证输入数据
-   - 返回患者信息结构体
-
-### 3. **UI构建模块 (UIBuilder.m)**
-   - `createTitleBar()` - 创建标题栏
-   - `createControlButtons()` - 创建控制按钮
-   - `createDisplayArea()` - 创建图像显示区域
-   - `createWorkLogPanel()` - 创建工作日志面板
-   - `showDetailedLog()` - 显示详细日志窗口
-
-### 4. **日志管理模块 (LogManager.m)**
-   - `updateStatus()` - 更新状态显示
-   - `addWorkLog()` - 添加工作日志
-   - `clearWorkLog()` - 清空日志
-   - `exportWorkLog()` - 导出日志到文件
-
-### 5. **数据初始化模块 (initializeDataContainer.m)**
-   - 初始化所有数据结构
-   - 设置默认值
-   - 定义脑叶名称和颜色
-
-### 6. **帧控制模块 (待完善)**
-   - 帧导航功能
-   - 播放/暂停功能
-   - 帧范围选择
-
-### 7. **ROI处理模块 (待完善)**
-   - ROI放置
-   - ROI位置管理
-   - ROI可视化
-
-### 8. **TDC提取模块 (待完善)**
-   - 时间密度曲线提取
-   - 数据平滑处理
-   - 参数计算
-
-## 如何使用
-
-### 运行程序
-
-```matlab
-% 方法1: 直接运行
-cd('e:\DSA_Refactored')
-DSA_Analysis_GUI_Refactored
-
-% 方法2: 添加路径后运行
-addpath('e:\DSA_Refactored')
-DSA_Analysis_GUI_Refactored
-```
-
-### 迁移原有代码
-
-如果您想继续使用原来的完整功能，需要从原文件中提取更多回调函数到相应模块中。
-
-## 重构优势
-
-### 1. **代码组织清晰**
-   - 每个模块负责单一功能
-   - 文件大小适中（每个文件100-300行）
-   - 易于定位和修改
-
-### 2. **可维护性提升**
-   - 模块独立，修改一个不影响其他
-   - 便于团队协作开发
-   - 降低代码复杂度
-
-### 3. **可扩展性增强**
-   - 容易添加新功能模块
-   - 方便进行单元测试
-   - 支持功能复用
-
-### 4. **性能优化**
-   - 按需加载模块
-   - 减少内存占用
-   - 便于性能调优
-
-## 下一步工作
-
-### 必须完成的模块 (保证基本功能)
-
-1. **FrameControl.m** - 帧控制功能
-   - updateFrameFromSlider
-   - togglePlayback
-   - goToFirstFrame/Prev/Next/Last
-   - selectFrames
-
-2. **ROIProcessor.m** - ROI处理
-   - placeROI
-   - updateROIDisplay
-   - validateROI
-
-3. **TDCExtractor.m** - TDC提取
-   - extractTDC
-   - smoothTDC
-   - calculateParameters
-
-4. **DataImporter.m** - 数据导入
-   - importDSA
-   - readDICOM
-   - preprocessImage
-
-5. **DataExporter.m** - 数据导出
-   - exportData
-   - exportResults
-   - generateReport
-
-6. **AnalysisEngine.m** - 分析引擎
-   - analyzeCurves
-   - calculatePerfusion
-   - assessRisk
-
-### 可选优化 (进一步提升)
-
-1. **使用面向对象设计**
-   ```matlab
-   classdef DSAAnalyzer < handle
-       properties
-           patientInfo
-           imageData
-           roiData
-       end
-       methods
-           function obj = DSAAnalyzer()
-               % 构造函数
-           end
-       end
-   end
-   ```
-
-2. **添加配置文件**
-   - config.json 或 config.m
-   - 存储默认参数
-   - 用户偏好设置
-
-3. **单元测试**
-   - 为每个模块编写测试
-   - 确保代码质量
-   - 自动化测试流程
-
-4. **错误处理增强**
-   - 统一的异常处理
-   - 详细的错误日志
-   - 用户友好的错误提示
-
-## 注意事项
-
-1. **路径问题**
-   - 确保 modules/ 目录在 MATLAB 路径中
-   - 使用 `addpath(genpath(...))` 自动添加
-
-2. **数据共享**
-   - 使用 `guidata()` 和 `setappdata()` 在模块间共享数据
-   - 保持数据结构一致性
-
-3. **回调函数**
-   - 回调函数需要访问主窗口句柄
-   - 使用 `gcf` 获取当前图形句柄
-   - 注意回调函数的作用域
-
-4. **兼容性**
-   - 保持与原代码的接口兼容
-   - 数据结构保持一致
-   - 功能逻辑不变
-
-## 联系与支持
-
-如有问题或建议，请参考原始代码 DSA_Analysis_GUI_v5.m 中的实现细节。
+**原始文件:** `DSA_Analysis_GUI_v5.m` (3443 行)  
+**重构入口:** `DSA_Analysis_GUI_Refactored.m` (67 行)  
+**模块总数:** 36 个独立文件  
+**总代码行数:** ~2000 行 (模块化后代码更清晰简洁)
 
 ---
 
-**版本**: v3.0 Refactored
-**最后更新**: 2025-11-10
-=======
-# DSA脑血流灌注分析系统 - 重构版本
 
-## 项目说明
-
-这是DSA_Analysis_GUI_v5.m的重构版本，将原来3000多行的单文件代码拆分成多个模块化文件，提高了代码的可维护性和可读性。
-
-## 文件结构
-
-```
-DSA_Refactored/
-│
-├── DSA_Analysis_GUI_Refactored.m     # 主入口文件 (约100行)
-│
-└── modules/                          # 功能模块目录
-    ├── getPatientInformation.m       # 患者信息输入模块
-    ├── UIBuilder.m                   # UI构建模块
-    ├── LogManager.m                  # 日志管理模块
-    ├── initializeDataContainer.m     # 数据初始化模块
-    ├── FrameControl.m                # 帧控制模块 (待创建)
-    ├── ROIProcessor.m                # ROI处理模块 (待创建)
-    ├── TDCExtractor.m                # TDC提取模块 (待创建)
-    ├── DataImporter.m                # 数据导入模块 (待创建)
-    ├── DataExporter.m                # 数据导出模块 (待创建)
-    └── AnalysisEngine.m              # 分析引擎模块 (待创建)
-```
-
-## 模块功能说明
-
-### 1. **主入口 (DSA_Analysis_GUI_Refactored.m)**
-   - 初始化系统
-   - 调用各个模块
-   - 创建主窗口
-   - 布局管理
-
-### 2. **患者信息模块 (getPatientInformation.m)**
-   - 显示患者信息输入对话框
-   - 验证输入数据
-   - 返回患者信息结构体
-
-### 3. **UI构建模块 (UIBuilder.m)**
-   - `createTitleBar()` - 创建标题栏
-   - `createControlButtons()` - 创建控制按钮
-   - `createDisplayArea()` - 创建图像显示区域
-   - `createWorkLogPanel()` - 创建工作日志面板
-   - `showDetailedLog()` - 显示详细日志窗口
-
-### 4. **日志管理模块 (LogManager.m)**
-   - `updateStatus()` - 更新状态显示
-   - `addWorkLog()` - 添加工作日志
-   - `clearWorkLog()` - 清空日志
-   - `exportWorkLog()` - 导出日志到文件
-
-### 5. **数据初始化模块 (initializeDataContainer.m)**
-   - 初始化所有数据结构
-   - 设置默认值
-   - 定义脑叶名称和颜色
-
-### 6. **帧控制模块 (待完善)**
-   - 帧导航功能
-   - 播放/暂停功能
-   - 帧范围选择
-
-### 7. **ROI处理模块 (待完善)**
-   - ROI放置
-   - ROI位置管理
-   - ROI可视化
-
-### 8. **TDC提取模块 (待完善)**
-   - 时间密度曲线提取
-   - 数据平滑处理
-   - 参数计算
-
-## 如何使用
-
-### 运行程序
+## 快速开始
 
 ```matlab
-% 方法1: 直接运行
-cd('e:\DSA_Refactored')
-DSA_Analysis_GUI_Refactored
-
-% 方法2: 添加路径后运行
-addpath('e:\DSA_Refactored')
+% 添加模块路径并启动系统
+addpath(genpath('modules'))
 DSA_Analysis_GUI_Refactored
 ```
-
-### 迁移原有代码
-
-如果您想继续使用原来的完整功能，需要从原文件中提取更多回调函数到相应模块中。
-
-## 重构优势
-
-### 1. **代码组织清晰**
-   - 每个模块负责单一功能
-   - 文件大小适中（每个文件100-300行）
-   - 易于定位和修改
-
-### 2. **可维护性提升**
-   - 模块独立，修改一个不影响其他
-   - 便于团队协作开发
-   - 降低代码复杂度
-
-### 3. **可扩展性增强**
-   - 容易添加新功能模块
-   - 方便进行单元测试
-   - 支持功能复用
-
-### 4. **性能优化**
-   - 按需加载模块
-   - 减少内存占用
-   - 便于性能调优
-
-## 下一步工作
-
-### 必须完成的模块 (保证基本功能)
-
-1. **FrameControl.m** - 帧控制功能
-   - updateFrameFromSlider
-   - togglePlayback
-   - goToFirstFrame/Prev/Next/Last
-   - selectFrames
-
-2. **ROIProcessor.m** - ROI处理
-   - placeROI
-   - updateROIDisplay
-   - validateROI
-
-3. **TDCExtractor.m** - TDC提取
-   - extractTDC
-   - smoothTDC
-   - calculateParameters
-
-4. **DataImporter.m** - 数据导入
-   - importDSA
-   - readDICOM
-   - preprocessImage
-
-5. **DataExporter.m** - 数据导出
-   - exportData
-   - exportResults
-   - generateReport
-
-6. **AnalysisEngine.m** - 分析引擎
-   - analyzeCurves
-   - calculatePerfusion
-   - assessRisk
-
-### 可选优化 (进一步提升)
-
-1. **使用面向对象设计**
-   ```matlab
-   classdef DSAAnalyzer < handle
-       properties
-           patientInfo
-           imageData
-           roiData
-       end
-       methods
-           function obj = DSAAnalyzer()
-               % 构造函数
-           end
-       end
-   end
-   ```
-
-2. **添加配置文件**
-   - config.json 或 config.m
-   - 存储默认参数
-   - 用户偏好设置
-
-3. **单元测试**
-   - 为每个模块编写测试
-   - 确保代码质量
-   - 自动化测试流程
-
-4. **错误处理增强**
-   - 统一的异常处理
-   - 详细的错误日志
-   - 用户友好的错误提示
-
-## 注意事项
-
-1. **路径问题**
-   - 确保 modules/ 目录在 MATLAB 路径中
-   - 使用 `addpath(genpath(...))` 自动添加
-
-2. **数据共享**
-   - 使用 `guidata()` 和 `setappdata()` 在模块间共享数据
-   - 保持数据结构一致性
-
-3. **回调函数**
-   - 回调函数需要访问主窗口句柄
-   - 使用 `gcf` 获取当前图形句柄
-   - 注意回调函数的作用域
-
-4. **兼容性**
-   - 保持与原代码的接口兼容
-   - 数据结构保持一致
-   - 功能逻辑不变
-
-## 联系与支持
-
-如有问题或建议，请参考原始代码 DSA_Analysis_GUI_v5.m 中的实现细节。
 
 ---
 
-**版本**: v3.0 Refactored
-**最后更新**: 2025-11-10
->>>>>>> 4d5e5c9 (Initial commit)
+## 目录结构
+
+```
+DSA_Analysis-main/
+├── DSA_Analysis_GUI_Refactored.m    # 主入口文件 (67行)
+├── DSA_Analysis_GUI_v5.m            # 原始单文件版本 (3443行)
+└── modules/                          # 模块化代码目录
+    ├── io/                          # 输入输出模块 (4个文件)
+    ├── analysis/                    # 数据分析模块 (5个文件)
+    ├── control/                     # 界面控制模块 (14个文件)
+    ├── ui/                          # UI组件模块 (6个文件)
+    ├── log/                         # 日志管理模块 (4个文件)
+    └── utils/                       # 工具函数模块 (1个文件)
+```
+
+---
+
+## 核心功能
+
+### 数据分析流程
+
+```
+导入DSA数据 → 放置ROI → 提取TDC曲线 → 分析曲线 → 显示结果 → 导出数据
+```
+
+### 术前术后对比
+
+- 🔍 **高灌注风险评估**: 自动识别血流速度增加>150%的脑叶
+- 📊 **可视化对比**: 柱状图、详细参数表
+- 💡 **临床建议**: 根据风险等级自动生成
+
+---
+
+## 模块详情
+
+### IO模块 (`modules/io/`)
+
+| 文件 | 行数 | 源文件行号 | 功能 |
+|------|:----:|:---------:|------|
+| `io_importDSA.m` | 176 | 1401-1576 | 导入DICOM格式DSA影像 |
+| `io_exportData.m` | 87 | 2497-2583 | 导出分析结果(MAT/Excel/CSV) |
+| `io_getPatientInformation.m` | 95 | 1171-1265 | 患者信息录入对话框 |
+| `io_initializeDataContainer.m` | 36 | 1105-1140 | 数据结构初始化 |
+
+### Analysis模块 (`modules/analysis/`)
+
+| 文件 | 行数 | 源文件行号 | 功能 |
+|------|:----:|:---------:|------|
+| `analysis_placeROI.m` | 78 | 1770-1847 | ROI区域放置(12点/4脑叶) |
+| `analysis_extractTDC.m` | 90 | 1911-2000 | TDC曲线提取 |
+| `analysis_analyzeCurves.m` | 136 | 2167-2302 | 曲线分析，计算11个灌注参数 |
+| `analysis_showResults.m` | 49 | 2386-2434 | 结果可视化显示 |
+| `analysis_comparePrePost.m` | 342 | 2619-2960 | 术前术后对比分析 |
+
+### Control模块 (`modules/control/`)
+
+| 文件 | 行数 | 功能 |
+|------|:----:|------|
+| `frameNavigation.m` | 76 | 帧导航核心逻辑 |
+| `selectFrames.m` | 188 | 帧范围选择器 |
+| `togglePlayback.m` | 42 | 播放/暂停切换 |
+| `resetAll.m` | 94 | 重置所有数据 |
+| `showHelp.m` | 32 | 显示帮助信息 |
+
+### UI模块 (`modules/ui/`)
+
+| 文件 | 行数 | 功能 |
+|------|:----:|------|
+| `createTitleBar.m` | 25 | 顶部标题栏 |
+| `createControlButtons.m` | 159 | 左侧功能按钮组 |
+| `createDisplayArea.m` | 15 | 中央图像显示区 |
+| `createInfoArea.m` | 157 | 右侧信息面板 |
+| `updateParamTable.m` | 53 | 参数表格更新 |
+| `showDetailedLog.m` | 36 | 详细日志窗口 |
+
+### Log模块 (`modules/log/`)
+
+| 文件 | 行数 | 功能 |
+|------|:----:|------|
+| `log_addWorkLog.m` | 25 | 添加日志条目 |
+| `log_updateStatus.m` | 25 | 更新状态显示 |
+| `log_clearWorkLog.m` | 14 | 清空日志 |
+| `log_exportWorkLog.m` | 36 | 导出日志到文件 |
+
+---
+
+## 灌注参数
+
+系统计算以下 **11个参数** × **4个脑叶**:
+
+| 参数 | 说明 | 单位 |
+|------|------|:----:|
+| **TMAX** | 峰值时间 | s |
+| **MTT** | 平均通过时间 | s |
+| **TU** | 上升时间 | s |
+| **TD** | 下降时间 | s |
+| **1/2TMAX** | 半峰值时间 | s |
+| **AUC** | 曲线下面积 | SI·s |
+| **AUCbefore** | 峰值前面积 | SI·s |
+| **AUCratio** | 面积比 | - |
+| **MS** | 最大斜率 | SI/s |
+| **AFS** | 平均斜率 | SI/s |
+| **CBF** | 脑血流量 | SI |
+
+---
+
+## 命名规范
+
+| 前缀 | 用途 | 示例 |
+|------|------|------|
+| `io_` | 输入输出操作 | `io_importDSA`, `io_exportData` |
+| `analysis_` | 数据分析功能 | `analysis_placeROI`, `analysis_extractTDC` |
+| `log_` | 日志管理 | `log_addWorkLog`, `log_updateStatus` |
+| `utils_` | 工具函数 | `utils_validateFrameInput` |
+| 无前缀 | UI组件和控制 | `createTitleBar`, `frameNavigation` |
+
+---
+
+## 重构优势
+
+| 优势 | 说明 |
+|------|------|
+| ✅ **可维护性** | 单一职责原则，快速定位代码 |
+| ✅ **可扩展性** | 新增功能无需修改核心代码 |
+| ✅ **协作效率** | 多人并行开发，减少冲突 |
+| ✅ **代码质量** | 模块化后更清晰简洁 |
+| ✅ **可测试性** | 每个模块可独立测试 |
+
+---
+
+## 技术栈
+
+- **语言**: MATLAB R2024b
+- **图像格式**: DICOM
+- **数据格式**: MAT, Excel (XLSX), CSV
+- **UI框架**: MATLAB GUIDE/uicontrol
+- **插值算法**: Hermite多项式
+- **风险评估**: TCD标准 (>150%为高风险)
+
+---
+
+## 相关文档
+
+- 📖 [完整模块文档](./MODULAR_STRUCTURE_README.md) - 详细的模块说明和源文件对应
+- 🔧 [提取指南](./EXTRACTION_GUIDE.md) - 代码提取过程记录
+- ✅ [重构完成报告](./REFACTORING_COMPLETION_REPORT.md) - 重构完成情况
+- 🚀 [快速开始指南](./QUICK_START.md) - 快速上手教程
+- 🔍 [修复报告](./FIX_REPORT.md) - 问题修复记录
+
+---
+
+## 版本历史
+
+| 版本 | 日期 | 说明 |
+|:----:|------|------|
+| **v5.0** | 2025-11 | 原始单文件版本 (3443行) |
+| **v5.1** | 2025-11-28 | 模块化重构完成 (36个文件) |
+
+---
+
+## 许可证
+
+MIT License
+
+---
+
+## 联系方式
+
+- **项目路径**: `f:\DSA_Analysis-main\DSA_Analysis-main\`
+- **GitHub**: [suryxin001204/DSA_Analysis-main](https://github.com/suryxin001204/DSA_Analysis-main)
+- **维护者**: DSA Analysis Team
+- **最后更新**: 2025-11-28

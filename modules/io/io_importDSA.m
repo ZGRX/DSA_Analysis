@@ -1,24 +1,25 @@
-function importDSA(~,~)
-    % 导入DSA DICOM数据
+function io_importDSA(varargin)
+    % 原 importDSA 的实现，已迁移到 modules/io，函数名改为 io_importDSA
+    % 保持原有行为，参数采用 varargin 以兼容 wrapper 调用
     fig = gcf;
     data = guidata(fig);
     
-    updateStatus('正在选择DICOM文件...');
-    addWorkLog('开始导入DSA数据...');
+    log_updateStatus('正在选择DICOM文件...');
+    log_addWorkLog('开始导入DSA数据...');
     
     [fname, pname] = uigetfile({'*.dcm;*.DCM;*.ima;*.IMA','DICOM文件 (*.dcm,*.ima)';...
                                '*.*','所有文件'},...
                               '选择DSA DICOM文件');
     if isequal(fname, 0)
-        updateStatus('已取消选择');
-        addWorkLog('用户取消了DSA数据导入');
+        log_updateStatus('已取消选择');
+        log_addWorkLog('用户取消了DSA数据导入');
         return; 
     end
     
     fullName = fullfile(pname, fname);
     
     try
-        updateStatus('正在读取DICOM文件...');
+        log_updateStatus('正在读取DICOM文件...');
         info = dicominfo(fullName);
         img = dicomread(fullName);
         
@@ -47,7 +48,7 @@ function importDSA(~,~)
             warndlg('检测到单帧2D数据，无法进行时间序列分析');
         end
         
-        % 灰度反转（按照张叙论文方法）
+        % 灰度反转
         if isinteger(img2D)
             img2D = double(img2D);
         end
@@ -105,22 +106,20 @@ function importDSA(~,~)
             title(sprintf('%s - 帧 1/%d', fname, totalFrames), 'Color', 'white', 'FontSize', 14, 'Interpreter', 'none');
         end
         
-        updateStatus(sprintf('成功导入: %s (%d帧)', fname, totalFrames));
-        addWorkLog(sprintf('成功导入DSA数据: %s', fname));
-        addWorkLog(sprintf('图像维度: %s', mat2str(dims)));
-        addWorkLog(sprintf('总帧数: %d', totalFrames));
+        log_updateStatus(sprintf('成功导入: %s (%d帧)', fname, totalFrames));
+        log_addWorkLog(sprintf('成功导入DSA数据: %s', fname));
+        log_addWorkLog(sprintf('图像维度: %s', mat2str(dims)));
+        log_addWorkLog(sprintf('总帧数: %d', totalFrames));
         
     catch ME
         errordlg(sprintf('DICOM读取失败: %s', ME.message));
-        updateStatus('导入失败');
-        addWorkLog(sprintf('导入失败: %s', ME.message));
+        log_updateStatus('导入失败');
+        log_addWorkLog(sprintf('导入失败: %s', ME.message));
     end
 end
 
 function updateUIControlsAfterImport(fig, totalFrames)
-    % 更新导入后的UI控件状态
-    
-    % 获取所有控件句柄
+    % 同原实现：更新导入后的UI控件状态
     frameSlider = getappdata(fig, 'frameSlider');
     currentFrameText = getappdata(fig, 'currentFrameText');
     totalFramesText = getappdata(fig, 'totalFramesText');
@@ -135,7 +134,6 @@ function updateUIControlsAfterImport(fig, totalFrames)
     applyRangeBtn = getappdata(fig, 'applyRangeBtn');
     frameRateEdit = getappdata(fig, 'frameRateEdit');
     
-    % 启用所有帧控制控件
     if totalFrames > 1
         if ishandle(frameSlider)
             set(frameSlider, 'Min', 1, 'Max', totalFrames, 'Value', 1,...
@@ -145,8 +143,6 @@ function updateUIControlsAfterImport(fig, totalFrames)
         if ishandle(playBtn)
             set(playBtn, 'Enable', 'on');
         end
-        
-        % 启用导航按钮
         if ishandle(firstFrameBtn)
             set(firstFrameBtn, 'Enable', 'on');
         end
@@ -160,7 +156,6 @@ function updateUIControlsAfterImport(fig, totalFrames)
             set(lastFrameBtn, 'Enable', 'on');
         end
     end
-    
     if ishandle(currentFrameText)
         set(currentFrameText, 'String', '1');
     end

@@ -1,0 +1,356 @@
+function analysis_comparePrePost(varargin)
+    % 术前术后对比分析 - migrated to modules/analysis with full visualization
+    log_addWorkLog('开始术前术后对比分析');
+    fig = gcf;
+    data = guidata(fig);
+    
+    % 数据完整性检查
+    if isempty(data.perfusionParams)
+        choice = questdlg({
+            '术前术后对比需要完整的数据分析。'
+            '当前会话没有完整的分析数据。'
+            ''
+            '请选择：'
+            '• "分析当前数据" - 如果这是术前数据'
+            '• "导入已有数据" - 如果已有分析结果'
+            '• "取消" - 返回主界面'
+        }, '数据准备', '分析当前数据', '导入已有数据', '取消', '分析当前数据');
+        
+        switch choice
+            case '分析当前数据'
+                if isempty(data.timeSeriesData)
+                    errordlg('请先完成数据导入、ROI放置和时间序列提取');
+                    return;
+                else
+                    analysis_analyzeCurves([],[]);
+                    drawnow;
+                    data = guidata(fig);
+                end
+            case '导入已有数据'
+            case '取消'
+                return;
+        end
+    end
+    
+    compFig = figure('Name', '术前术后灌注对比分析', ...
+                    'NumberTitle', 'off', ...
+                    'Position', [200, 50, 1400, 900], ...
+                    'MenuBar', 'none', ...
+                    'Color', [0.95, 0.95, 0.95]);
+
+    uicontrol('Parent', compFig, 'Style', 'text', ...
+             'String', '高灌注风险预警 (TCD标准: 术后血流速度增加 > 150%)', ...
+             'Position', [50, 850, 1300, 30], ...
+             'FontSize', 16, 'FontWeight', 'bold', ...
+             'BackgroundColor', [0.9, 0.9, 0.9], ...
+             'HorizontalAlignment', 'center');
+
+    btnPanel = uipanel(compFig, 'Title', '数据导入', ...
+                      'Position', [0.05, 0.88, 0.9, 0.1], ...
+                      'BackgroundColor', [0.9, 0.9, 0.9], ...
+                      'FontWeight', 'bold');
+
+    uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
+             'String', '导入术前数据', 'Units', 'normalized', ...
+             'Position', [0.05, 0.2, 0.2, 0.6], 'FontSize', 12, ...
+             'BackgroundColor', [0.8, 0.9, 0.8], ...
+             'Callback', @importPreOpData);
+
+    uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
+             'String', '导入术后数据', 'Units', 'normalized', ...
+             'Position', [0.3, 0.2, 0.2, 0.6], 'FontSize', 12, ...
+             'BackgroundColor', [0.8, 0.9, 0.8], ...
+             'Callback', @importPostOpData);
+
+    analyzeBtn = uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
+             'String', '分析对比', 'Units', 'normalized', ...
+             'Position', [0.55, 0.2, 0.2, 0.6], 'FontSize', 12, ...
+             'BackgroundColor', [0.8, 0.8, 1], ...
+             'Callback', @analyzeComparison, 'Enable', 'off');
+
+    uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
+             'String', '导出对比结果', 'Units', 'normalized', ...
+             'Position', [0.8, 0.2, 0.15, 0.6], 'FontSize', 12, ...
+             'BackgroundColor', [0.8, 1, 0.8], ...
+             'Callback', @exportComparison);
+
+    resultsPanel = uipanel(compFig, 'Title', '对比分析结果', ...
+                          'Position', [0.05, 0.05, 0.9, 0.8], ...
+                          'BackgroundColor', [1, 1, 1], ...
+                          'FontWeight', 'bold', 'FontSize', 12);
+
+    compData.preOpData = [];
+    compData.postOpData = [];
+    compData.preOpFile = '';
+    compData.postOpFile = '';
+    guidata(compFig, compData);
+    
+    function importPreOpData(~,~)
+        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术前分析数据');
+        if isequal(fname, 0), return; end
+        
+        try
+            preData = load(fullfile(pname, fname));
+            compData = guidata(compFig);
+            compData.preOpData = preData.data;
+            compData.preOpFile = fname;
+            guidata(compFig, compData);
+            
+            if ~isempty(compData.preOpData) && ~isempty(compData.postOpData)
+                set(analyzeBtn, 'Enable', 'on');
+            end
+            
+            msgbox(sprintf('成功导入术前数据: %s', fname), '成功');
+        catch ME
+            errordlg(sprintf('导入失败: %s', ME.message), '错误');
+        end
+    end
+
+    function importPostOpData(~,~)
+        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术后分析数据');
+        if isequal(fname, 0), return; end
+        
+        try
+            postData = load(fullfile(pname, fname));
+            compData = guidata(compFig);
+            compData.postOpData = postData.data;
+            compData.postOpFile = fname;
+            guidata(compFig, compData);
+            
+            if ~isempty(compData.preOpData) && ~isempty(compData.postOpData)
+                set(analyzeBtn, 'Enable', 'on');
+            end
+            
+            msgbox(sprintf('成功导入术后数据: %s', fname), '成功');
+        catch ME
+            errordlg(sprintf('导入失败: %s', ME.message), '错误');
+        end
+    end
+
+    function analyzeComparison(~,~)
+        compData = guidata(compFig);
+        
+        if isempty(compData.preOpData) || isempty(compData.postOpData)
+            errordlg('请先导入术前和术后数据');
+            return;
+        end
+        
+        delete(get(resultsPanel, 'Children'));
+        
+        preParams = compData.preOpData.perfusionParams;
+        postParams = compData.postOpData.perfusionParams;
+        
+        lobeNames = {'额叶', '顶叶', '颞叶', '枕叶'};
+        increaseRatios = zeros(1, 4);
+        riskLevels = cell(1, 4);
+        
+        for lobe = 1:4
+            preMS = preParams(lobe).MS;
+            postMS = postParams(lobe).MS;
+            
+            if preMS > 0
+                increaseRatios(lobe) = (postMS / preMS) * 100;
+            else
+                increaseRatios(lobe) = 0;
+            end
+            
+            if increaseRatios(lobe) >= 150
+                riskLevels{lobe} = '高风险';
+            elseif increaseRatios(lobe) >= 120
+                riskLevels{lobe} = '中风险';
+            else
+                riskLevels{lobe} = '低风险';
+            end
+        end
+        
+        tableData = cell(4, 5);
+        for i = 1:4
+            tableData{i,1} = lobeNames{i};
+            tableData{i,2} = sprintf('%.3f', preParams(i).MS);
+            tableData{i,3} = sprintf('%.3f', postParams(i).MS);
+            tableData{i,4} = sprintf('%.1f%%', increaseRatios(i));
+            tableData{i,5} = riskLevels{i};
+        end
+        
+        uitable(resultsPanel, 'Data', tableData, ...
+           'Position', [50, 550, 600, 150], ...
+           'ColumnName', {'脑叶', '术前MS', '术后MS', '增加比例', '风险等级'}, ...
+           'ColumnWidth', {80, 100, 100, 100, 120}, ...
+           'RowName', [], 'FontSize', 12, 'FontWeight', 'bold');
+       
+        highRiskCount = sum(increaseRatios >= 150);
+        mediumRiskCount = sum(increaseRatios >= 120 & increaseRatios < 150);
+
+        if highRiskCount > 0
+            warningText = sprintf('高灌注风险预警: %d个脑叶血流速度增加超过150%%', highRiskCount);
+            warningColor = [1 0.5 0.5];
+            warningLevel = '高风险';
+        elseif mediumRiskCount > 0
+            warningText = sprintf('中灌注风险提示: %d个脑叶血流速度增加120%%-150%%', mediumRiskCount);
+            warningColor = [1 0.9 0.5];
+            warningLevel = '中风险';
+        else
+            warningText = '无高灌注风险';
+            warningColor = [0.5 1 0.5];
+            warningLevel = '低风险';
+        end
+
+        uicontrol(resultsPanel, 'Style', 'text', ...
+                 'String', warningText, ...
+                 'Position', [50, 500, 600, 40], ...
+                 'FontSize', 16, 'FontWeight', 'bold', ...
+                 'BackgroundColor', warningColor, ...
+                 'HorizontalAlignment', 'center');
+
+        % 绘制柱状图对比
+        axes('Parent', resultsPanel, 'Position', [0.65, 0.45, 0.3, 0.4]);
+        
+        barData = [increaseRatios; ones(1,4)*100]';
+        h = bar(barData, 'grouped');
+        set(h(1), 'FaceColor', [0.2 0.6 0.8]);
+        set(h(2), 'FaceColor', [0.8 0.8 0.8]);
+        
+        hold on;
+        plot([0,5], [150, 150], 'r--', 'LineWidth', 3);
+        text(5.2, 150, '高风险', 'Color', 'r', 'FontWeight', 'bold', 'FontSize', 11);
+        plot([0,5], [120, 120], 'y--', 'LineWidth', 3);
+        text(5.2, 120, '中风险', 'Color', [0.8 0.6 0], 'FontWeight', 'bold', 'FontSize', 11);
+        
+        set(gca, 'XTickLabel', lobeNames, 'FontSize', 12, 'FontWeight', 'bold');
+        ylabel('血流速度增加比例 (%)', 'FontSize', 13, 'FontWeight', 'bold');
+        title('术前术后血流速度对比 (基于MS参数)', 'FontSize', 14, 'FontWeight', 'bold');
+        legend('增加比例', '基线(100%)', 'Location', 'northwest', 'FontSize', 11);
+        grid on;
+        
+        for i = 1:4
+            text(i, increaseRatios(i)+8, sprintf('%.1f%%', increaseRatios(i)), ...
+                 'HorizontalAlignment', 'center', 'FontWeight', 'bold', 'FontSize', 11, ...
+                 'BackgroundColor', 'white', 'EdgeColor', 'black', 'Margin', 2);
+        end
+        
+        % 显示详细参数对比
+        paramPanel = uipanel(resultsPanel, 'Title', '详细参数对比', ...
+                            'Position', [0.05, 0.05, 0.55, 0.35], ...
+                            'BackgroundColor', [0.95 0.95 0.95], ...
+                            'FontWeight', 'bold', 'FontSize', 12);
+        
+        paramData = cell(4, 7);
+        for i = 1:4
+            paramData{i,1} = lobeNames{i};
+            paramData{i,2} = sprintf('%.3f', preParams(i).TMAX);
+            paramData{i,3} = sprintf('%.3f', postParams(i).TMAX);
+            paramData{i,4} = sprintf('%.3f', preParams(i).MTT);
+            paramData{i,5} = sprintf('%.3f', postParams(i).MTT);
+            paramData{i,6} = sprintf('%.1f', preParams(i).AUC);
+            paramData{i,7} = sprintf('%.1f', postParams(i).AUC);
+        end
+        
+        uitable(paramPanel, 'Data', paramData, ...
+            'Position', [10, 10, 530, 120], ...
+            'ColumnName', {'脑叶', '术前TMAX', '术后TMAX', '术前MTT', '术后MTT', '术前AUC', '术后AUC'}, ...
+            'ColumnWidth', {60, 80, 80, 80, 80, 80, 80}, ...
+            'RowName', [], 'FontSize', 10);
+        
+        % 显示临床建议
+        advicePanel = uipanel(resultsPanel, 'Title', '临床建议', ...
+                             'Position', [0.65, 0.05, 0.3, 0.35], ...
+                             'BackgroundColor', [0.95 0.95 0.95], ...
+                             'FontWeight', 'bold', 'FontSize', 12);
+        
+        switch warningLevel
+            case '高风险'
+                adviceText = {'高风险灌注建议:', ...
+                             '• 密切监测神经功能状态', ...
+                             '• 控制血压在较低水平', ...
+                             '• 考虑预防性药物治疗', ...
+                             '• 必要时进行影像学复查', ...
+                             '• 避免血压剧烈波动'};
+                adviceColor = [1 0.8 0.8];
+            case '中风险'
+                adviceText = {'中风险灌注建议:', ...
+                             '• 定期监测血压', ...
+                             '• 观察神经症状变化', ...
+                             '• 避免血压剧烈波动', ...
+                             '• 适当控制液体入量'};
+                adviceColor = [1 1 0.8];
+            case '低风险'
+                adviceText = {'低风险灌注建议:', ...
+                             '• 常规术后观察', ...
+                             '• 维持血压稳定', ...
+                             '• 正常康复治疗', ...
+                             '• 定期随访'};
+                adviceColor = [0.8 1 0.8];
+        end
+        
+        uicontrol(advicePanel, 'Style', 'text', ...
+                 'String', adviceText, ...
+                 'Position', [10, 10, 350, 120], ...
+                 'FontSize', 11, ...
+                 'BackgroundColor', adviceColor, ...
+                 'HorizontalAlignment', 'left');
+        
+        compData.increaseRatios = increaseRatios;
+        compData.riskLevels = riskLevels;
+        compData.warningLevel = warningLevel;
+        guidata(compFig, compData);
+        
+        log_updateStatus('术前术后对比分析完成');
+        log_addWorkLog('术前术后对比分析完成');
+    end
+
+    function exportComparison(~,~)
+        compData = guidata(compFig);
+        
+        [file, path] = uiputfile({'*.xlsx','Excel文件 (*.xlsx)'; '*.csv','CSV文件 (*.csv)'}, '保存对比分析结果');
+        if isequal(file, 0), return; end
+        
+        try
+            fullPath = fullfile(path, file);
+            
+            if ~isfield(compData, 'increaseRatios') || isempty(compData.increaseRatios)
+                errordlg('请先进行对比分析再导出结果！', '错误');
+                return;
+            end
+            
+            lobeNames = {'额叶', '顶叶', '颞叶', '枕叶'};
+            tableData = table();
+            
+            for i = 1:4
+                tableData.Lobe{i} = lobeNames{i};
+                tableData.PreOp_MS(i) = compData.preOpData.perfusionParams(i).MS;
+                tableData.PostOp_MS(i) = compData.postOpData.perfusionParams(i).MS;
+                tableData.IncreaseRatio(i) = compData.increaseRatios(i);
+                tableData.RiskLevel{i} = compData.riskLevels{i};
+                tableData.PreOp_TMAX(i) = compData.preOpData.perfusionParams(i).TMAX;
+                tableData.PostOp_TMAX(i) = compData.postOpData.perfusionParams(i).TMAX;
+                tableData.PreOp_MTT(i) = compData.preOpData.perfusionParams(i).MTT;
+                tableData.PostOp_MTT(i) = compData.postOpData.perfusionParams(i).MTT;
+                tableData.PreOp_AUC(i) = compData.preOpData.perfusionParams(i).AUC;
+                tableData.PostOp_AUC(i) = compData.postOpData.perfusionParams(i).AUC;
+            end
+            
+            summaryTable = table();
+            summaryTable.AnalysisDate = {datestr(now)};
+            summaryTable.PreOpFile = {compData.preOpFile};
+            summaryTable.PostOpFile = {compData.postOpFile};
+            summaryTable.OverallRiskLevel = {compData.warningLevel};
+            summaryTable.HighRiskLobes = {sum(compData.increaseRatios >= 150)};
+            summaryTable.MediumRiskLobes = {sum(compData.increaseRatios >= 120 & compData.increaseRatios < 150)};
+            
+            [~, ~, ext] = fileparts(file);
+            if strcmpi(ext, '.xlsx')
+                writetable(tableData, fullPath, 'Sheet', '详细参数');
+                writetable(summaryTable, fullPath, 'Sheet', '分析总结');
+            else
+                writetable(tableData, fullPath);
+            end
+            
+            msgbox('对比结果导出成功！', '成功');
+            log_addWorkLog(sprintf('对比结果导出成功: %s', file));
+        catch ME
+            errordlg(sprintf('导出失败: %s', ME.message), '错误');
+        end
+    end
+    
+    log_addWorkLog('术前术后对比分析窗口已打开');
+end
