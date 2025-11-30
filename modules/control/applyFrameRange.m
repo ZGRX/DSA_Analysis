@@ -1,3 +1,4 @@
+%%应用用户输入的起始/结束帧范围，更新数据结构并刷新显示与状态
 function applyFrameRange(~,~)
     fig = gcf;
     data = guidata(fig);

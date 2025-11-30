@@ -1,3 +1,4 @@
+%%将当前帧前进一帧（循环到第一帧），并更新滑块与界面显示
 function advanceFrame()
     fig = gcf;
     data = guidata(fig);
