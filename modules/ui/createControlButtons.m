@@ -20,13 +20,12 @@ function createControlButtons(parent)
     % 第一组：数据准备
     createButtonGroupLabel(parent, '数据准备', 10, startY + 5);
     buttons1 = {
-        {'导入DSA数据', @io_importDSA, [0.2, 0.6, 0.8]}, ...
-        {'选择分析帧', @selectFrames, [0.2, 0.6, 0.8]}
+        {'导入DSA数据', @io_importDSA, [0.2, 0.6, 0.8]}
     };
     createButtonGroup(parent, buttons1, startY, buttonWidth, buttonHeight, spacing);
 
     % 第二组：ROI分析
-    y2 = startY - 2*(buttonHeight+spacing);
+    y2 = startY - 1*(buttonHeight+spacing);
     createButtonGroupLabel(parent, 'ROI分析', 10, y2 + 5);
     buttons2 = {
         {'放置ROI', @analysis_placeROI, [0.3, 0.7, 0.3]}, ...
@@ -35,7 +34,7 @@ function createControlButtons(parent)
     createButtonGroup(parent, buttons2, y2, buttonWidth, buttonHeight, spacing);
 
     % 第三组：分析显示
-    y3 = startY - 4*(buttonHeight+spacing) - groupSpacing;
+    y3 = startY - 3*(buttonHeight+spacing) - groupSpacing;
     createButtonGroupLabel(parent, '分析显示', 10, y3 + 5);
     buttons3 = {
         {'分析曲线', @analysis_analyzeCurves, [0.8, 0.6, 0.2]}, ...
@@ -44,7 +43,7 @@ function createControlButtons(parent)
     createButtonGroup(parent, buttons3, y3, buttonWidth, buttonHeight, spacing);
 
     % 第四组：数据管理
-    y4 = startY - 6*(buttonHeight+spacing) - 2*groupSpacing;
+    y4 = startY - 5*(buttonHeight+spacing) - 2*groupSpacing;
     createButtonGroupLabel(parent, '数据管理', 10, y4 + 5);
     buttons4 = {
         {'导出数据', @io_exportData, [0.4, 0.4, 0.6]}, ...
@@ -53,7 +52,7 @@ function createControlButtons(parent)
     createButtonGroup(parent, buttons4, y4, buttonWidth, buttonHeight, spacing);
 
     % 第五组：系统操作
-    y5 = startY - 8*(buttonHeight+spacing) - 3*groupSpacing;
+    y5 = startY - 7*(buttonHeight+spacing) - 3*groupSpacing;
     createButtonGroupLabel(parent, '系统操作', 10, y5 + 5);
     buttons5 = {
         {'重置所有', @resetAll, [0.8, 0.2, 0.2]}, ...
