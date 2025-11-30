@@ -23,7 +23,7 @@ function applyFrameRange(~,~)
         end
         
         if isnan(startFrame) || isnan(endFrame) || startFrame < 1 || endFrame > data.totalFrames || startFrame > endFrame
-            errordlg('请输入有效的帧范围');
+            utils_showMessage('请输入有效的帧范围', 'error');
             return;
         end
         
@@ -38,6 +38,6 @@ function applyFrameRange(~,~)
         updateFrameDisplay();
         log_updateStatus(sprintf('已应用帧范围: %d-%d', startFrame, endFrame));
     catch ME
-        errordlg(sprintf('应用帧范围失败: %s', ME.message));
+        utils_showMessage('应用帧范围失败', 'error', ME.message);
     end
 end

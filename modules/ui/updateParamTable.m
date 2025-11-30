@@ -35,19 +35,37 @@ function updateParamTable()
             continue;
         end
         
-        tableData{1, lobe+1} = sprintf('%.3f', params(lobe).TMAX);
-        tableData{2, lobe+1} = sprintf('%.3f', params(lobe).MTT);
-        tableData{3, lobe+1} = sprintf('%.3f', params(lobe).TU);
-        tableData{4, lobe+1} = sprintf('%.3f', params(lobe).TD);
-        tableData{5, lobe+1} = sprintf('%.3f', params(lobe).halfTMAX);
-        tableData{6, lobe+1} = sprintf('%.1f', params(lobe).AUC);
-        tableData{7, lobe+1} = sprintf('%.1f', params(lobe).AUCbefore);
-        tableData{8, lobe+1} = sprintf('%.3f', params(lobe).AUCratio);
-        tableData{9, lobe+1} = sprintf('%.3f', params(lobe).MS);
-        tableData{10, lobe+1} = sprintf('%.3f', params(lobe).AFS);
-        tableData{11, lobe+1} = sprintf('%.3f', params(lobe).CBF);
+        % 辅助函数：安全格式化数值，避免 Inf/NaN 显示
+        formatValue = @(val, fmt) formatSafeValue(val, fmt);
+        
+        tableData{1, lobe+1} = formatValue(params(lobe).TMAX, '%.3f');
+        tableData{2, lobe+1} = formatValue(params(lobe).MTT, '%.3f');
+        tableData{3, lobe+1} = formatValue(params(lobe).TU, '%.3f');
+        tableData{4, lobe+1} = formatValue(params(lobe).TD, '%.3f');
+        tableData{5, lobe+1} = formatValue(params(lobe).halfTMAX, '%.3f');
+        tableData{6, lobe+1} = formatValue(params(lobe).AUC, '%.1f');
+        tableData{7, lobe+1} = formatValue(params(lobe).AUCbefore, '%.1f');
+        tableData{8, lobe+1} = formatValue(params(lobe).AUCratio, '%.3f');
+        tableData{9, lobe+1} = formatValue(params(lobe).MS, '%.3f');
+        tableData{10, lobe+1} = formatValue(params(lobe).AFS, '%.3f');
+        tableData{11, lobe+1} = formatValue(params(lobe).CBF, '%.3f');
     end
     
     % 更新表格
     set(paramTable, 'Data', tableData);
+end
+
+function str = formatSafeValue(value, format)
+    % 安全格式化数值，处理 Inf、-Inf、NaN
+    if isnan(value)
+        str = 'N/A';
+    elseif isinf(value)
+        if value > 0
+            str = '+Inf';
+        else
+            str = '-Inf';
+        end
+    else
+        str = sprintf(format, value);
+    end
 end

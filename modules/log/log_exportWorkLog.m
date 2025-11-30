@@ -7,7 +7,7 @@ function log_exportWorkLog()
 
     workLogData = getappdata(fig, 'workLogData');
     if isempty(workLogData)
-        errordlg('工作日志为空，无法导出');
+        utils_showMessage('工作日志为空，无法导出', 'error');
         return;
     end
 
@@ -35,9 +35,9 @@ function log_exportWorkLog()
 
         fclose(fid);
         log_addWorkLog(sprintf('工作日志已导出: %s', file));
-        msgbox('工作日志导出成功！', '成功');
+        utils_showMessage('工作日志导出成功！', 'success');
 
     catch ME
-        errordlg(sprintf('导出失败: %s', ME.message));
+        utils_showMessage('工作日志导出失败', 'error', ME.message);
     end
 end

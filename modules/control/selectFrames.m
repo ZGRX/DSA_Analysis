@@ -3,7 +3,7 @@ function selectFrames(~,~)
     data = guidata(fig);
     
     if isempty(data) || (isempty(data.img4D) && isempty(data.processedSeries))
-        errordlg('没有多帧数据可用');
+        utils_showMessage('没有多帧数据可用', 'error');
         return;
     end
     
@@ -70,7 +70,7 @@ function selectFrames(~,~)
             startFrame = str2double(get(startEdit, 'String'));
             endFrame = str2double(get(endEdit, 'String'));
             if isnan(startFrame) || isnan(endFrame) || startFrame < 1 || endFrame > mainData.totalFrames || startFrame > endFrame
-                errordlg('请输入有效的帧范围');
+                utils_showMessage('请输入有效的帧范围', 'error');
                 return;
             end
             midFrame = round((startFrame + endFrame) / 2);
@@ -81,7 +81,7 @@ function selectFrames(~,~)
             title(sprintf('预览帧 %d (范围: %d-%d)', midFrame, startFrame, endFrame));
             colorbar;
         catch ME
-            errordlg(sprintf('预览失败: %s', ME.message));
+            utils_showMessage('帧预览失败', 'error', ME.message);
         end
     end
     
@@ -92,7 +92,7 @@ function selectFrames(~,~)
             startFrame = str2double(get(startEdit, 'String'));
             endFrame = str2double(get(endEdit, 'String'));
             if isnan(startFrame) || isnan(endFrame) || startFrame < 1 || endFrame > mainData.totalFrames || startFrame > endFrame
-                errordlg('请输入有效的帧范围');
+                utils_showMessage('请输入有效的帧范围', 'error');
                 return;
             end
             mainData.startFrame = startFrame;
@@ -113,7 +113,7 @@ function selectFrames(~,~)
             updateStatusForMain(mainFig, sprintf('已选择帧范围: %d-%d', startFrame, endFrame));
             delete(figSelect);
         catch ME
-            errordlg(sprintf('帧选择失败: %s', ME.message));
+            utils_showMessage('帧选择失败', 'error', ME.message);
         end
     end
 end

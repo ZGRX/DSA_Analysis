@@ -19,7 +19,7 @@ function analysis_comparePrePost(varargin)
         switch choice
             case '分析当前数据'
                 if isempty(data.timeSeriesData)
-                    errordlg('请先完成数据导入、ROI放置和时间序列提取');
+                    utils_showMessage('请先完成数据导入、ROI放置和时间序列提取', 'error');
                     return;
                 else
                     analysis_analyzeCurves([],[]);
@@ -100,9 +100,9 @@ function analysis_comparePrePost(varargin)
                 set(analyzeBtn, 'Enable', 'on');
             end
             
-            msgbox(sprintf('成功导入术前数据: %s', fname), '成功');
+            utils_showMessage(sprintf('成功导入术前数据: %s', fname), 'success');
         catch ME
-            errordlg(sprintf('导入失败: %s', ME.message), '错误');
+            utils_showMessage('导入失败', 'error', ME.message);
         end
     end
 
@@ -121,9 +121,9 @@ function analysis_comparePrePost(varargin)
                 set(analyzeBtn, 'Enable', 'on');
             end
             
-            msgbox(sprintf('成功导入术后数据: %s', fname), '成功');
+            utils_showMessage(sprintf('成功导入术后数据: %s', fname), 'success');
         catch ME
-            errordlg(sprintf('导入失败: %s', ME.message), '错误');
+            utils_showMessage('导入失败', 'error', ME.message);
         end
     end
 
@@ -131,7 +131,7 @@ function analysis_comparePrePost(varargin)
         compData = guidata(compFig);
         
         if isempty(compData.preOpData) || isempty(compData.postOpData)
-            errordlg('请先导入术前和术后数据');
+            utils_showMessage('请先导入术前和术后数据', 'error');
             return;
         end
         
@@ -308,7 +308,7 @@ function analysis_comparePrePost(varargin)
             fullPath = fullfile(path, file);
             
             if ~isfield(compData, 'increaseRatios') || isempty(compData.increaseRatios)
-                errordlg('请先进行对比分析再导出结果！', '错误');
+                utils_showMessage('请先进行对比分析再导出结果！', 'error');
                 return;
             end
             
@@ -345,10 +345,10 @@ function analysis_comparePrePost(varargin)
                 writetable(tableData, fullPath);
             end
             
-            msgbox('对比结果导出成功！', '成功');
+            utils_showMessage('对比结果导出成功！', 'success');
             log_addWorkLog(sprintf('对比结果导出成功: %s', file));
         catch ME
-            errordlg(sprintf('导出失败: %s', ME.message), '错误');
+            utils_showMessage('对比结果导出失败', 'error', ME.message);
         end
     end
     

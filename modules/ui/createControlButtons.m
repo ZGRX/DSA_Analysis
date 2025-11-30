@@ -143,7 +143,7 @@ end
 function showDetailedLog(~,~)
     workLogData = getappdata(gcf, 'workLogData');
     if isempty(workLogData)
-        msgbox('工作日志为空', '工作日志');
+        utils_showMessage('工作日志为空', 'error');
         return;
     end
 

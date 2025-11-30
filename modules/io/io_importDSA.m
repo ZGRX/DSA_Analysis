@@ -112,7 +112,7 @@ function io_importDSA(varargin)
         log_addWorkLog(sprintf('总帧数: %d', totalFrames));
         
     catch ME
-        errordlg(sprintf('DICOM读取失败: %s', ME.message));
+        utils_showMessage('DICOM读取失败', 'error', ME.message);
         log_updateStatus('导入失败');
         log_addWorkLog(sprintf('导入失败: %s', ME.message));
     end

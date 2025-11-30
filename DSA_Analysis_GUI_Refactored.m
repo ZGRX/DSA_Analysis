@@ -5,6 +5,14 @@ function DSA_Analysis_GUI_Refactored
     
     % 添加模块路径
     addpath(genpath(fullfile(fileparts(mfilename('fullpath')), 'modules')));
+    % 确保 MATLAB 刷新函数缓存，避免编辑后函数不可识别的问题
+    rehash;
+    % 如果关键工具函数仍然不可见，再次添加并刷新（兼容交互式运行场景）
+    if ~exist('utils_showMessage', 'file')
+        warning('utils_showMessage 未在路径中，尝试再次添加 modules 目录并刷新路径');
+        addpath(genpath(fullfile(fileparts(mfilename('fullpath')), 'modules')));
+        rehash;
+    end
     
     %% 1. 清理工作区
     clear variables;
@@ -36,29 +44,31 @@ function DSA_Analysis_GUI_Refactored
     %% 6. 初始化数据容器
     io_initializeDataContainer(fig);
     
-    %% 7. 系统就绪
+    %% 7. 弹出目录选择窗口
+    try
+        if exist('createDirectorySelector', 'file') == 2
+            createDirectorySelector(fig);
+        end
+    catch ME
+        warning('目录选择窗口启动失败: %s', ME.message);
+    end
+    
+    %% 8. 系统就绪
     log_updateStatus('系统就绪 - 请导入术前DSA数据');
     disp('系统初始化完成！');
 end
 
 function fig = createMainWindow()
-    % 创建主窗口
+    % 创建主窗口（全屏模式）
     screenSize = get(0, 'ScreenSize');
-    screenWidth = screenSize(3);
-    screenHeight = screenSize(4);
-    
-    windowWidth = 1400;
-    windowHeight = 850;
-    windowX = round((screenWidth - windowWidth) / 2);
-    windowY = round((screenHeight - windowHeight) / 2);
     
     fig = figure('Name', 'DSA脑血流灌注分析系统 v3.0 (重构版)', ...
                 'NumberTitle', 'off', ...
                 'MenuBar', 'none', ...
                 'ToolBar', 'none', ...
-                'Position', [windowX, windowY, windowWidth, windowHeight], ...
+                'Position', screenSize, ...
                 'Color', [0.07, 0.15, 0.25], ...
-                'Resize', 'off', ...
+                'WindowState', 'maximized', ...
                 'CloseRequestFcn', @closeGUI);
 end
 

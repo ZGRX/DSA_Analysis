@@ -81,13 +81,13 @@ function patientInfo = io_getPatientInformation(varargin)
         patientInfo.date = get(dateEdit, 'String');
         patientInfo.inputTime = datestr(now, 'yyyy-mm-dd HH:MM:SS');
         if isempty(patientInfo.name) || isempty(patientInfo.id)
-            errordlg('患者姓名和病历号为必填项！', '输入错误');
+            utils_showMessage('患者姓名和病历号为必填项！', 'error');
             return;
         end
         if ~isempty(patientInfo.age)
             ageNum = str2double(patientInfo.age);
             if isnan(ageNum) || ageNum < 0 || ageNum > 150
-                errordlg('请输入有效的年龄！', '输入错误');
+                utils_showMessage('请输入有效的年龄！', 'error');
                 return;
             end
         end

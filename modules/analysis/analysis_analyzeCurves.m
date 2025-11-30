@@ -3,7 +3,7 @@ function analysis_analyzeCurves(varargin)
     fig = gcf;
     data = guidata(fig);
     if isempty(data.timeSeriesData)
-        errordlg('请先提取时间序列数据', '错误');
+        utils_showMessage('请先提取时间序列数据', 'error');
         log_addWorkLog('错误: 尝试分析曲线但无时间序列数据');
         return;
     end
@@ -87,14 +87,14 @@ function analysis_analyzeCurves(varargin)
         data.frameRate = frameRate;
         guidata(fig, data);
         updateParamTable();
-        showPerfusionParams(perfusionParams, data.lobeNames);
+        % showPerfusionParams(perfusionParams, data.lobeNames);  % 已移除弹窗，参数在右侧表格显示
         log_updateStatus('TDC曲线分析完成');
         log_addWorkLog('TDC曲线分析完成');
         log_addWorkLog('使用Hermite多项式插值进行曲线平滑');
         log_addWorkLog('计算了TMAX, MTT, AUC等11个灌注参数');
-        msgbox('TDC曲线分析完成！', '完成');
+        utils_showMessage('TDC曲线分析完成', 'success');
     catch ME
-        errordlg(sprintf('曲线分析失败: %s', ME.message), '错误');
+        utils_showMessage('曲线分析失败', 'error', ME.message);
         log_updateStatus('曲线分析失败');
         log_addWorkLog(sprintf('错误: 曲线分析失败 - %s', ME.message));
     end

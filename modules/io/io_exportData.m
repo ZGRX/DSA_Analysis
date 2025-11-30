@@ -4,7 +4,7 @@ function io_exportData(varargin)
     data = guidata(fig);
     
     if isempty(data.timeSeriesData)
-        errordlg('没有数据可导出', '错误');
+        utils_showMessage('没有数据可导出', 'error');
         log_addWorkLog('错误: 尝试导出但无可用数据');
         return;
     end
@@ -46,11 +46,11 @@ function io_exportData(varargin)
         if strcmp(choice, '是')
             analysis_comparePrePost([], []);
         else
-            msgbox('分析数据保存成功！', '完成');
+            utils_showMessage('分析数据保存成功！', 'success');
         end
         log_addWorkLog(sprintf('数据导出成功: %s', file));
     catch ME
-        errordlg(sprintf('导出失败: %s', ME.message), '错误');
+        utils_showMessage('数据导出失败', 'error', ME.message);
         log_updateStatus('导出失败');
         log_addWorkLog(sprintf('错误: 导出失败 - %s', ME.message));
     end

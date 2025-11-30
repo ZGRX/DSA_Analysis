@@ -4,7 +4,7 @@ function analysis_extractTDC(varargin)
     data = guidata(fig);
     
     if isempty(data.roiMask) || isempty(data.img4D)
-        errordlg('请先放置ROI并确保有多帧数据');
+        utils_showMessage('请先放置ROI并确保有多帧数据', 'error');
         log_addWorkLog('错误: 尝试提取TDC但ROI或数据不完整');
         return;
     end
@@ -80,12 +80,12 @@ function analysis_extractTDC(varargin)
         end
 
         log_updateStatus(sprintf('时间序列数据提取完成 (共%d帧, %.1f秒)', totalFrames, (totalFrames-1)/frameRate));
-        msgbox(sprintf('TDC提取成功！\n\n共提取12个ROI的时间密度曲线\n数据已归一化处理(基线=50, 范围0-30)\n总帧数: %d\n采样率: %.1f fps', totalFrames, frameRate), 'TDC提取成功', 'help');
+        utils_showMessage(sprintf('TDC提取完成 (%d帧)', totalFrames), 'success');
         log_addWorkLog('时间序列数据提取完成');
         log_addWorkLog(sprintf('提取了 %d 个ROI的时间密度曲线', 12));
         log_addWorkLog(sprintf('数据归一化处理完成 (基线=50, 范围0-30)'));
     catch ME
-        errordlg(sprintf('数据提取失败: %s', ME.message));
+        utils_showMessage('TDC提取失败', 'error', ME.message);
         log_updateStatus('数据提取失败');
         log_addWorkLog(sprintf('TDC提取失败: %s', ME.message));
     end

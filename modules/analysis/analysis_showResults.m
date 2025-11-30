@@ -2,7 +2,7 @@ function analysis_showResults(varargin)
     fig = gcf;
     data = guidata(fig);
     if isempty(data.smoothedLobeData)
-        errordlg('请先分析数据', '错误');
+        utils_showMessage('请先分析数据', 'error');
         return;
     end
     log_updateStatus('正在显示分析结果...');
@@ -44,6 +44,6 @@ function analysis_showResults(varargin)
         set(resultFig, 'Units', 'normalized'); set(resultFig, 'Position', [0.05, 0.05, 0.9, 0.85]);
         log_updateStatus('分析结果显示完成'); log_addWorkLog('显示分析结果图表完成');
     catch ME
-        errordlg(sprintf('结果显示失败: %s', ME.message), '错误'); log_updateStatus('结果显示失败'); log_addWorkLog(sprintf('错误: 结果显示失败 - %s', ME.message));
+        utils_showMessage('结果显示失败', 'error', ME.message); log_updateStatus('结果显示失败'); log_addWorkLog(sprintf('错误: 结果显示失败 - %s', ME.message));
     end
 end
