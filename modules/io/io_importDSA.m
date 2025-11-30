@@ -4,19 +4,47 @@ function io_importDSA(varargin)
     fig = gcf;
     data = guidata(fig);
     
-    log_updateStatus('正在选择DICOM文件...');
-    log_addWorkLog('开始导入DSA数据...');
-    
-    [fname, pname] = uigetfile({'*.dcm;*.DCM;*.ima;*.IMA','DICOM文件 (*.dcm,*.ima)';...
-                               '*.*','所有文件'},...
-                              '选择DSA DICOM文件');
-    if isequal(fname, 0)
-        log_updateStatus('已取消选择');
-        log_addWorkLog('用户取消了DSA数据导入');
-        return; 
+    % 检查是否从文件管理器自动加载
+    if isappdata(fig, 'autoLoadFile')
+        % 从文件管理器加载单个文件
+        fullName = getappdata(fig, 'autoLoadFile');
+        [pname, fname, ext] = fileparts(fullName);
+        fname = [fname, ext];
+        log_updateStatus(sprintf('正在从文件管理器加载: %s', fname));
+        log_addWorkLog(sprintf('从文件管理器加载文件: %s', fname));
+    elseif isappdata(fig, 'autoLoadFolder')
+        % 从文件管理器加载文件夹中的第一个DICOM文件
+        pname = getappdata(fig, 'autoLoadFolder');
+        dicomFiles = dir(fullfile(pname, '*.dcm'));
+        if isempty(dicomFiles)
+            dicomFiles = dir(fullfile(pname, '*.dicom'));
+        end
+        if isempty(dicomFiles)
+            dicomFiles = dir(fullfile(pname, '*.DCM'));
+        end
+        if isempty(dicomFiles)
+            utils_showMessage('未找到DICOM文件', 'error');
+            return;
+        end
+        fname = dicomFiles(1).name;
+        fullName = fullfile(pname, fname);
+        log_updateStatus('正在从文件管理器加载DICOM数据...');
+        log_addWorkLog('从文件管理器加载DSA数据...');
+    else
+        % 正常用户选择文件
+        log_updateStatus('正在选择DICOM文件...');
+        log_addWorkLog('开始导入DSA数据...');
+        
+        [fname, pname] = uigetfile({'*.dcm;*.DCM;*.ima;*.IMA','DICOM文件 (*.dcm,*.ima)';...
+                                   '*.*','所有文件'},...
+                                  '选择DSA DICOM文件');
+        if isequal(fname, 0)
+            log_updateStatus('已取消选择');
+            log_addWorkLog('用户取消了DSA数据导入');
+            return; 
+        end
+        fullName = fullfile(pname, fname);
     end
-    
-    fullName = fullfile(pname, fname);
     
     try
         log_updateStatus('正在读取DICOM文件...');

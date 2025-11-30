@@ -86,7 +86,14 @@ function analysis_comparePrePost(varargin)
     guidata(compFig, compData);
     
     function importPreOpData(~,~)
-        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术前分析数据');
+        % 默认从Results目录读取
+        baseDir = pwd;
+        resultsDir = fullfile(baseDir, 'PatientData');
+        if ~exist(resultsDir, 'dir')
+            resultsDir = pwd;
+        end
+        
+        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术前分析数据', resultsDir);
         if isequal(fname, 0), return; end
         
         try
@@ -107,7 +114,14 @@ function analysis_comparePrePost(varargin)
     end
 
     function importPostOpData(~,~)
-        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术后分析数据');
+        % 默认从Results目录读取
+        baseDir = pwd;
+        resultsDir = fullfile(baseDir, 'PatientData');
+        if ~exist(resultsDir, 'dir')
+            resultsDir = pwd;
+        end
+        
+        [fname, pname] = uigetfile({'*.mat','MAT文件 (*.mat)'}, '选择术后分析数据', resultsDir);
         if isequal(fname, 0), return; end
         
         try
@@ -301,7 +315,25 @@ function analysis_comparePrePost(varargin)
     function exportComparison(~,~)
         compData = guidata(compFig);
         
-        [file, path] = uiputfile({'*.xlsx','Excel文件 (*.xlsx)'; '*.csv','CSV文件 (*.csv)'}, '保存对比分析结果');
+        % 默认保存到Results目录
+        baseDir = pwd;
+        timestamp = datestr(now, 'yyyymmdd_HHMMSS');
+        defaultName = sprintf('Comparison_%s.xlsx', timestamp);
+        
+        % 尝试从数据中获取患者ID
+        if ~isempty(compData.preOpData) && isfield(compData.preOpData, 'patientInfo')
+            patientID = compData.preOpData.patientInfo.id;
+        else
+            patientID = 'Unknown';
+        end
+        
+        resultsDir = fullfile(baseDir, 'PatientData', patientID, 'Results');
+        if ~exist(resultsDir, 'dir')
+            mkdir(resultsDir);
+        end
+        
+        [file, path] = uiputfile({'*.xlsx','Excel文件 (*.xlsx)'; '*.csv','CSV文件 (*.csv)'}, ...
+                                 '保存对比分析结果', fullfile(resultsDir, defaultName));
         if isequal(file, 0), return; end
         
         try

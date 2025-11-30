@@ -45,13 +45,14 @@ function createControlButtons(parent)
     y4 = startY - 4*(buttonHeight+spacing) - 2*groupSpacing;
     createButtonGroupLabel(parent, '数据管理', 10, y4 + 5);
     buttons4 = {
+        {'文件管理器', @createFileManagerDialog, [0.3, 0.65, 0.92]}, ...
         {'导出数据', @io_exportData, [0.5, 0.5, 0.65]}, ...
         {'术前术后对比', @analysis_comparePrePost, [0.92, 0.4, 0.4]}
     };
     createButtonGroup(parent, buttons4, y4, buttonWidth, buttonHeight, spacing);
 
     % 第五组：系统操作
-    y5 = startY - 6*(buttonHeight+spacing) - 3*groupSpacing;
+    y5 = startY - 7*(buttonHeight+spacing) - 3*groupSpacing;
     createButtonGroupLabel(parent, '系统操作', 10, y5 + 5);
     buttons5 = {
         {'重置所有', @resetAll, [0.85, 0.3, 0.3]}, ...

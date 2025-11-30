@@ -1,5 +1,6 @@
 function io_exportData(varargin)
     % 已迁移的 exportData 实现，前缀为 io_
+    % 自动保存到文件管理器的Results目录
     fig = gcf;
     data = guidata(fig);
     
@@ -9,8 +10,30 @@ function io_exportData(varargin)
         return;
     end
     
+    % 获取患者信息，确定保存路径
+    dataContainer = getappdata(fig, 'dataContainer');
+    if ~isempty(dataContainer) && isfield(dataContainer, 'patientInfo')
+        patientID = dataContainer.patientInfo.id;
+        patientName = dataContainer.patientInfo.name;
+    else
+        patientID = 'Unknown';
+        patientName = '未知';
+    end
+    
+    % 构建Results目录路径
+    baseDir = pwd;
+    resultsDir = fullfile(baseDir, 'PatientData', patientID, 'Results');
+    if ~exist(resultsDir, 'dir')
+        mkdir(resultsDir);
+    end
+    
+    % 生成默认文件名（带时间戳）
+    timestamp = datestr(now, 'yyyymmdd_HHMMSS');
+    defaultName = sprintf('Analysis_%s_%s.xlsx', patientName, timestamp);
+    
     log_addWorkLog('开始数据导出流程');
-    [file, path] = uiputfile({'*.mat', 'MAT文件 (*.mat)'; '*.xlsx', 'Excel文件 (*.xlsx)'; '*.csv', 'CSV文件 (*.csv)'}, '保存分析结果');
+    [file, path] = uiputfile({'*.xlsx', 'Excel文件 (*.xlsx)'; '*.mat', 'MAT文件 (*.mat)'; '*.csv', 'CSV文件 (*.csv)'}, ...
+                             '保存分析结果', fullfile(resultsDir, defaultName));
     if isequal(file, 0)
         log_updateStatus('导出取消');
         return;
