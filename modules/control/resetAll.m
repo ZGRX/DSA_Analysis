@@ -49,7 +49,7 @@ function resetUIControls(fig)
     startFrameEdit = getappdata(fig, 'startFrameEdit');
     endFrameEdit = getappdata(fig, 'endFrameEdit');
     frameRateEdit = getappdata(fig, 'frameRateEdit');
-    applyRangeBtn = getappdata(fig, 'applyRangeBtn');
+
     preOpROIStatus = getappdata(fig, 'preOpROIStatus');
     postOpROIStatus = getappdata(fig, 'postOpROIStatus');
     riskResultText = getappdata(fig, 'riskResultText');
@@ -68,7 +68,7 @@ function resetUIControls(fig)
     if ishandle(startFrameEdit), set(startFrameEdit, 'String', '1', 'Enable', 'off'); end
     if ishandle(endFrameEdit), set(endFrameEdit, 'String', '1', 'Enable', 'off'); end
     if ishandle(frameRateEdit), set(frameRateEdit, 'String', '4', 'Enable', 'off'); end
-    if ishandle(applyRangeBtn), set(applyRangeBtn, 'Enable', 'off'); end
+
     if ishandle(preOpROIStatus), set(preOpROIStatus, 'String', '术前:未标定', 'ForegroundColor', [1, 0.8, 0.8]); end
     if ishandle(postOpROIStatus), set(postOpROIStatus, 'String', '术后:未标定', 'ForegroundColor', [1, 0.8, 0.8]); end
     if ishandle(riskResultText), set(riskResultText, 'String', '未评估', 'ForegroundColor', [1, 1, 0]); end

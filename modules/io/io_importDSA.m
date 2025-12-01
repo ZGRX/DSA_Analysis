@@ -159,7 +159,6 @@ function updateUIControlsAfterImport(fig, totalFrames)
     lastFrameBtn = getappdata(fig, 'lastFrameBtn');
     startFrameEdit = getappdata(fig, 'startFrameEdit');
     endFrameEdit = getappdata(fig, 'endFrameEdit');
-    applyRangeBtn = getappdata(fig, 'applyRangeBtn');
     frameRateEdit = getappdata(fig, 'frameRateEdit');
     
     if totalFrames > 1
@@ -195,9 +194,6 @@ function updateUIControlsAfterImport(fig, totalFrames)
     end
     if ishandle(endFrameEdit)
         set(endFrameEdit, 'String', num2str(totalFrames), 'Enable', 'on');
-    end
-    if ishandle(applyRangeBtn)
-        set(applyRangeBtn, 'Enable', 'on');
     end
     if ishandle(frameRateEdit)
         set(frameRateEdit, 'Enable', 'on');
