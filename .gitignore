@@ -1,0 +1,6 @@
+PatientData/
+*.dcm
+*.DCM
+*.mat
+*.asv
+.vscode/

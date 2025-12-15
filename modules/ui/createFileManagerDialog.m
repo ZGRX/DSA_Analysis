@@ -63,7 +63,7 @@ function createFileManagerDialog(varargin)
     % 左侧工具栏
     uicontrol('Parent', leftPanel, ...
              'Style', 'pushbutton', ...
-             'String', '导入DICOM', ...
+             'String', '📥 导入DSA数据', ...
              'Units', 'normalized', ...
              'Position', [0.03, 0.92, 0.18, 0.06], ...
              'FontSize', 9, ...
@@ -74,7 +74,7 @@ function createFileManagerDialog(varargin)
     
     uicontrol('Parent', leftPanel, ...
              'Style', 'pushbutton', ...
-             'String', '⚡加载到系统', ...
+             'String', '➡️ 导入选中文件', ...
              'Units', 'normalized', ...
              'Position', [0.22, 0.92, 0.20, 0.06], ...
              'FontSize', 10, ...
@@ -447,6 +447,11 @@ function loadToSystemCallback(dlg)
         return;
     end
     
+    % 确保 mainFig 是单个句柄
+    if length(mainFig) > 1
+        mainFig = mainFig(1);
+    end
+    
     % 确定加载路径（如果是文件夹则加载文件夹，如果是文件则加载该文件）
     if isfolder(filePath)
         loadFolder = filePath;
@@ -536,7 +541,16 @@ function importDICOMCallback(dlg)
         for i = 1:length(file)
             srcFile = fullfile(path, file{i});
             dstFile = fullfile(rawDataDir, file{i});
-            copyfile(srcFile, dstFile);
+            if exist(dstFile, 'file')
+                % 如果文件已存在，询问是否覆盖
+                choice = questdlg(sprintf('文件 %s 已存在，是否覆盖？', file{i}), ...
+                    '文件冲突', '覆盖', '跳过', '覆盖');
+                if strcmp(choice, '覆盖')
+                    copyfile(srcFile, dstFile, 'f');
+                end
+            else
+                copyfile(srcFile, dstFile);
+            end
         end
         
         updateStatus(dlg, sprintf('已导入 %d 个DICOM文件', length(file)));
@@ -552,7 +566,14 @@ function importDICOMCallback(dlg)
             if ~files(i).isdir
                 srcFile = fullfile(srcFolder, files(i).name);
                 dstFile = fullfile(rawDataDir, files(i).name);
-                copyfile(srcFile, dstFile);
+                
+                if exist(dstFile, 'file')
+                    % 文件夹导入时，默认覆盖或者跳过，这里为了效率直接覆盖
+                    % 或者可以使用 'f' 强制覆盖
+                    copyfile(srcFile, dstFile, 'f');
+                else
+                    copyfile(srcFile, dstFile);
+                end
                 count = count + 1;
             end
         end
@@ -561,6 +582,52 @@ function importDICOMCallback(dlg)
     end
     
     refreshLeftPanel(dlg);
+
+    % 询问是否立即加载到系统
+    loadChoice = questdlg('导入完成。是否立即将数据加载到系统进行分析？', ...
+                         '加载确认', '立即加载', '稍后', '立即加载');
+    
+    if strcmp(loadChoice, '立即加载')
+        % 自动选中刚导入的文件（如果是单个文件）或文件夹
+        % 简单起见，我们直接调用 loadToSystemCallback
+        % 但需要先在列表框中选中正确的一项
+        
+        % 获取刷新后的文件列表
+        leftListBox = getappdata(dlg, 'leftListBox');
+        leftFilePaths = getappdata(dlg, 'leftFilePaths');
+        
+        if ~isempty(leftFilePaths)
+            % 默认选中最后一个（通常是刚导入的，如果按时间排序的话...但这里是按文件名排序）
+            % 尝试找到刚导入的文件名
+            targetName = '';
+            if strcmp(choice, '单个文件')
+                targetName = file{1}; % 取第一个导入的文件名
+            else
+                % 文件夹导入，比较难定位，默认选中第一个
+            end
+            
+            idx = [];
+            if ~isempty(targetName)
+                for k = 1:length(leftFilePaths)
+                    [~, fname, fext] = fileparts(leftFilePaths{k});
+                    if strcmp([fname fext], targetName)
+                        idx = k;
+                        break;
+                    end
+                end
+            end
+            
+            if isempty(idx) && ~isempty(leftFilePaths)
+                idx = length(leftFilePaths); % 默认选中最后一个
+            end
+            
+            if ~isempty(idx)
+                set(leftListBox, 'Value', idx);
+                % 触发加载
+                loadToSystemCallback(dlg);
+            end
+        end
+    end
 end
 
 %% ========== 导出结果回调 ==========
@@ -689,6 +756,12 @@ end
 
 %% ========== 文件信息更新 ==========
 function updateLeftFileInfo(dlg)
+    % 检查是否双击
+    if strcmp(get(dlg, 'SelectionType'), 'open')
+        loadToSystemCallback(dlg);
+        return;
+    end
+
     leftListBox = getappdata(dlg, 'leftListBox');
     leftInfoText = getappdata(dlg, 'leftInfoText');
     leftFilePaths = getappdata(dlg, 'leftFilePaths');

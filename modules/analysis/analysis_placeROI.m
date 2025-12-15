@@ -56,7 +56,7 @@ function analysis_placeROI(varargin)
         validClick = false;
         while ~validClick
             try
-                set(fig, 'Pointer', 'crosshair');
+                set(fig, 'Pointer', 'circle');
                 
                 % 使用waitforbuttonpress和SelectionType获取更准确的按键信息
                 waitforbuttonpress;

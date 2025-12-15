@@ -17,48 +17,40 @@ function createControlButtons(parent)
     spacing = 10;
     groupSpacing = 18;
 
-    % 第一组：数据准备
-    createButtonGroupLabel(parent, '数据准备', 10, startY + 5);
+    % 第一组：数据管理
+    createButtonGroupLabel(parent, '数据管理', 10, startY + 5);
     buttons1 = {
-        {'导入DSA数据', @io_importDSA, [0.3, 0.65, 0.92]}
+        {'📁 文件管理器', @createFileManagerDialog, [0.3, 0.65, 0.92]}, ...
+        {'📤 导出数据', @io_exportData, [0.5, 0.5, 0.65]}, ...
+        {'📊 术前术后对比', @analysis_comparePrePost, [0.92, 0.4, 0.4]}
     };
     createButtonGroup(parent, buttons1, startY, buttonWidth, buttonHeight, spacing);
 
     % 第二组：ROI分析
-    y2 = startY - 1*(buttonHeight+spacing);
+    y2 = startY - 3*(buttonHeight+spacing) - groupSpacing;
     createButtonGroupLabel(parent, 'ROI分析', 10, y2 + 5);
     buttons2 = {
-        {'放置ROI', @analysis_placeROI, [0.35, 0.75, 0.45]}, ...
-        {'提取并分析TDC', @analysis_extractAndAnalyze, [0.95, 0.65, 0.25]}
+        {'🎯 放置ROI', @analysis_placeROI, [0.35, 0.75, 0.45]}, ...
+        {'📈 提取并分析TDC', @analysis_extractAndAnalyze, [0.95, 0.65, 0.25]}
     };
     createButtonGroup(parent, buttons2, y2, buttonWidth, buttonHeight, spacing);
 
     % 第三组：分析显示
-    y3 = startY - 3*(buttonHeight+spacing) - groupSpacing;
+    y3 = startY - 5*(buttonHeight+spacing) - 2*groupSpacing;
     createButtonGroupLabel(parent, '分析显示', 10, y3 + 5);
     buttons3 = {
-        {'显示结果', @analysis_showResults, [0.65, 0.45, 0.85]}
+        {'🖼️ 显示结果', @analysis_showResults, [0.65, 0.45, 0.85]}
     };
     createButtonGroup(parent, buttons3, y3, buttonWidth, buttonHeight, spacing);
 
-    % 第四组：数据管理
-    y4 = startY - 4*(buttonHeight+spacing) - 2*groupSpacing;
-    createButtonGroupLabel(parent, '数据管理', 10, y4 + 5);
+    % 第四组：系统操作
+    y4 = startY - 6*(buttonHeight+spacing) - 3*groupSpacing;
+    createButtonGroupLabel(parent, '系统操作', 10, y4 + 5);
     buttons4 = {
-        {'文件管理器', @createFileManagerDialog, [0.3, 0.65, 0.92]}, ...
-        {'导出数据', @io_exportData, [0.5, 0.5, 0.65]}, ...
-        {'术前术后对比', @analysis_comparePrePost, [0.92, 0.4, 0.4]}
+        {'🔄 重置所有', @resetAll, [0.85, 0.3, 0.3]}, ...
+        {'❓ 使用帮助', @showHelp, [0.3, 0.65, 0.92]}
     };
     createButtonGroup(parent, buttons4, y4, buttonWidth, buttonHeight, spacing);
-
-    % 第五组：系统操作
-    y5 = startY - 7*(buttonHeight+spacing) - 3*groupSpacing;
-    createButtonGroupLabel(parent, '系统操作', 10, y5 + 5);
-    buttons5 = {
-        {'重置所有', @resetAll, [0.85, 0.3, 0.3]}, ...
-        {'使用帮助', @showHelp, [0.3, 0.65, 0.92]}
-    };
-    createButtonGroup(parent, buttons5, y5, buttonWidth, buttonHeight, spacing);
 
     % 工作日志面板
     createWorkLogPanel(parent, 10);
