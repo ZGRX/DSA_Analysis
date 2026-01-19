@@ -13,21 +13,37 @@ if isappdata(fig, 'autoLoadFile')
     log_updateStatus(sprintf('正在从文件管理器加载: %s', fname));
     log_addWorkLog(sprintf('从文件管理器加载文件: %s', fname));
 elseif isappdata(fig, 'autoLoadFolder')
-    % 从文件管理器加载文件夹中的第一个DICOM文件
+    % 从文件管理器加载文件夹
     pname = getappdata(fig, 'autoLoadFolder');
-    dicomFiles = dir(fullfile(pname, '*.dcm'));
-    if isempty(dicomFiles)
-        dicomFiles = dir(fullfile(pname, '*.dicom'));
+    
+    % 优先使用递归搜索到的文件列表
+    if isappdata(fig, 'autoLoadFiles')
+        dicomFileList = getappdata(fig, 'autoLoadFiles');
+        rmappdata(fig, 'autoLoadFiles');  % 清理
+        if ~isempty(dicomFileList)
+            fullName = dicomFileList{1};
+            [pname, fname, ext] = fileparts(fullName);
+            fname = [fname, ext];
+        else
+            utils_showMessage('未找到DICOM文件', 'error');
+            return;
+        end
+    else
+        % 兼容旧逻辑：在顶层文件夹中搜索
+        dicomFiles = dir(fullfile(pname, '*.dcm'));
+        if isempty(dicomFiles)
+            dicomFiles = dir(fullfile(pname, '*.dicom'));
+        end
+        if isempty(dicomFiles)
+            dicomFiles = dir(fullfile(pname, '*.DCM'));
+        end
+        if isempty(dicomFiles)
+            utils_showMessage('未找到DICOM文件', 'error');
+            return;
+        end
+        fname = dicomFiles(1).name;
+        fullName = fullfile(pname, fname);
     end
-    if isempty(dicomFiles)
-        dicomFiles = dir(fullfile(pname, '*.DCM'));
-    end
-    if isempty(dicomFiles)
-        utils_showMessage('未找到DICOM文件', 'error');
-        return;
-    end
-    fname = dicomFiles(1).name;
-    fullName = fullfile(pname, fname);
     log_updateStatus('正在从文件管理器加载DICOM数据...');
     log_addWorkLog('从文件管理器加载DSA数据...');
 else
