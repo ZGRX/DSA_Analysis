@@ -21,14 +21,10 @@ clc;
 disp('=== DSA脑血流灌注分析系统 v3.0 (重构版) ===');
 disp('正在初始化系统...');
 
-%% 2. 医生登录
-doctorInfo = login_doctor();
-if isempty(doctorInfo)
-    disp('登录取消，系统退出');
-    return;
-end
-
-log_updateStatus(sprintf('医师登录成功: %s', doctorInfo.name));
+%% 2. 医生登录 (已跳过)
+% 这里跳过了登录界面，使用默认的医生信息，以便后续代码继续工作
+doctorInfo = struct('name', 'Admin', 'id', '00001');
+log_updateStatus(sprintf('自动登录: %s', doctorInfo.name));
 
 %% 3. 创建主窗口
 fig = createMainWindow();
