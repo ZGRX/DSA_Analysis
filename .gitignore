@@ -1,0 +1,8 @@
+PatientData/
+*.mat
+*.dicom
+*.dcm
+.vscode/
+temp/
+results/
+log/
