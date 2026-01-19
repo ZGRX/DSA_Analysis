@@ -105,13 +105,13 @@ uicontrol('Parent', leftPanel, ...
 
 uicontrol('Parent', leftPanel, ...
     'Style', 'pushbutton', ...
-    'String', '删除', ...
+    'String', '清空', ...
     'Units', 'normalized', ...
     'Position', [0.75, 0.92, 0.12, 0.06], ...
     'FontSize', 9, ...
     'BackgroundColor', [0.92, 0.4, 0.4], ...
     'ForegroundColor', [1, 1, 1], ...
-    'Callback', @(~,~)deleteLeftFile(dlg));
+    'Callback', @(~,~)clearLeftFolder(dlg));
 
 % 左侧文件信息面板
 uicontrol('Parent', leftPanel, ...
@@ -698,55 +698,45 @@ end
 end
 
 %% ========== 删除左侧文件 ==========
-function deleteLeftFile(dlg)
-leftListBox = getappdata(dlg, 'leftListBox');
-leftFilePaths = getappdata(dlg, 'leftFilePaths');
-
-idx = get(leftListBox, 'Value');
-if isempty(idx) || (length(idx) == 1 && (idx > length(leftFilePaths) || isempty(leftFilePaths{idx})))
-    updateStatus(dlg, '请先选择要删除的文件');
-    return;
-end
-
-% 过滤有效的索引
-validIdx = idx(idx <= length(leftFilePaths));
-validIdx = validIdx(~cellfun(@isempty, leftFilePaths(validIdx)));
-
-if isempty(validIdx)
-    updateStatus(dlg, '请先选择要删除的文件');
-    return;
-end
-
-% 构建删除确认消息
-numItems = length(validIdx);
-if numItems == 1
-    filePath = leftFilePaths{validIdx(1)};
-    [~, name, ext] = fileparts(filePath);
-    confirmMsg = sprintf('确定要删除吗？\n\n%s%s', name, ext);
-else
-    confirmMsg = sprintf('确定要删除选中的 %d 个项目吗？', numItems);
-end
-
-choice = questdlg(confirmMsg, '确认删除', '删除', '取消', '取消');
-
-if strcmp(choice, '删除')
-    deletedCount = 0;
-    for i = 1:length(validIdx)
-        filePath = leftFilePaths{validIdx(i)};
+function clearLeftFolder(dlg)
+    % 清空左侧（原始数据）文件夹
+    rawDataDir = getappdata(dlg, 'rawDataDir');
+    
+    if ~exist(rawDataDir, 'dir')
+        updateStatus(dlg, '原始数据目录不存在');
+        return;
+    end
+    
+    files = dir(rawDataDir);
+    % 排除 . 和 ..
+    files = files(~ismember({files.name}, {'.', '..'}));
+    
+    if isempty(files)
+        updateStatus(dlg, '原始数据目录已经是空的');
+        return;
+    end
+    
+    % 确认删除
+    choice = questdlg('确定要清空所有原始病人数据吗？此操作不可恢复。', ...
+        '清空确认', '清空', '取消', '取消');
+        
+    if strcmp(choice, '清空')
         try
-            if isfolder(filePath)
-                rmdir(filePath, 's');  % 递归删除文件夹
-            else
-                delete(filePath);
+            % 遍历删除
+            for i = 1:length(files)
+                fullPath = fullfile(rawDataDir, files(i).name);
+                if files(i).isdir
+                    rmdir(fullPath, 's');
+                else
+                    delete(fullPath);
+                end
             end
-            deletedCount = deletedCount + 1;
-        catch
-            % 忽略删除失败的项目
+            updateStatus(dlg, '原始数据已清空');
+            refreshLeftPanel(dlg);
+        catch ME
+            updateStatus(dlg, sprintf('清空失败: %s', ME.message));
         end
     end
-    updateStatus(dlg, sprintf('已删除 %d 个项目', deletedCount));
-    refreshLeftPanel(dlg);
-end
 end
 
 %% ========== 删除右侧文件 ==========
