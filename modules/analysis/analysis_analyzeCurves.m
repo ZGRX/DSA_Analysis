@@ -16,67 +16,100 @@ try
     else
         frameRate = 4;
     end
-    if isnan(frameRate) || frameRate <= 0
-        frameRate = 4;
-        if ishandle(frameRateEdit)
-            set(frameRateEdit, 'String', '4');
+    if isnan(frameRate) || frameRate <= 0, frameRate = 4; end
+    
+    tsData = data.timeSeriesData;
+    [numROIs, numFrames] = size(tsData);
+    
+    if numROIs < 12
+        error('ROI数据不完整（当前为%d个，需要12个）。请重新提取TDC。', numROIs);
+    end
+    if numFrames < 2
+        error('数据帧数不足以进行分析。');
+    end
+    
+    lobeAvgData = zeros(4, numFrames);
+    for lobe = 1:4
+        lobe_indices = (lobe-1)*3+1:min(lobe*3, numROIs);
+        if length(lobe_indices) == 3
+            lobeAvgData(lobe, :) = mean(tsData(lobe_indices, :), 1);
+        else
+            % 如果不足3个，取实际存在的均值
+            lobeAvgData(lobe, :) = mean(tsData(lobe_indices, :), 1);
         end
     end
-    lobeAvgData = zeros(4, size(data.timeSeriesData, 2));
-    for lobe = 1:4
-        lobe_indices = (lobe-1)*3+1:lobe*3;
-        lobeAvgData(lobe, :) = mean(data.timeSeriesData(lobe_indices, :), 1);
-    end
-    t = (0:size(data.timeSeriesData, 2)-1) / frameRate;
-    t_highres = linspace(t(1), t(end), length(t) * 10);
+    
+    t = (0:numFrames-1) / frameRate;
+    t_highres = linspace(t(1), t(end), max(2, numFrames * 10));
     smoothedLobeData = zeros(4, length(t_highres));
+    
     hWait = waitbar(0, '正在进行Hermite多项式插值平滑...');
     for lobe = 1:4
         smoothedLobeData(lobe, :) = pchip(t, lobeAvgData(lobe, :), t_highres);
         waitbar(lobe/4, hWait, sprintf('正在处理%s...', data.lobeNames{lobe}));
     end
-    close(hWait);
+    if ishandle(hWait), close(hWait); end
+    
     perfusionParams = struct();
     for lobe = 1:4
         curve = smoothedLobeData(lobe, :);
         time = t_highres;
         [maxVal, maxIdx] = max(curve);
         TMAX = time(maxIdx);
+        
+        % 动态基线计算
         baseline = mean(curve(1:min(5, length(curve))));
-        threshold = baseline + 0.1 * (maxVal - baseline);
-        tuIdx = find(curve > threshold, 1, 'first');
+        
+        % --- 增强型参数提取算法 ---
+        % 寻找造影剂到达点 BAT (Bolus Arrival Time)
+        batThreshold = baseline + 0.1 * max(0.1, (maxVal - baseline));
+        tuIdx = find(curve > batThreshold, 1, 'first');
         if isempty(tuIdx), tuIdx = 1; end
         TU = time(tuIdx);
-        TD = TMAX - TU;
-        cumulative_auc = cumtrapz(time, curve - baseline);
-        half_auc = cumulative_auc(end) / 2;
-        mttIdx = find(cumulative_auc >= half_auc, 1, 'first');
-        if isempty(mttIdx)
-            MTT = TMAX;
-        else
-            MTT = time(mttIdx);
+        TD = max(0.1, TMAX - TU);
+        
+        % 1. 稳健的 MS (Maximum Slope) 计算: 5点滑动线性回归
+        windowSize = 5;
+        slopes = zeros(1, length(curve));
+        for i = 1:length(curve)
+            winIdx = (i - floor(windowSize/2)) : (i + floor(windowSize/2));
+            winIdx(winIdx < 1 | winIdx > length(curve)) = [];
+            if length(winIdx) >= 3
+                coeffs = polyfit(time(winIdx), curve(winIdx), 1);
+                slopes(i) = coeffs(1);
+            else
+                slopes(i) = 0;
+            end
         end
+        
+        searchRange = tuIdx:maxIdx;
+        if isempty(searchRange) || length(searchRange) < 2
+            MS = max(slopes);
+        else
+            MS = max(slopes(searchRange));
+        end
+        
+        % 其他参数计算保护
+        cumulative_auc = cumtrapz(time, curve - baseline);
+        total_auc = cumulative_auc(end);
+        if total_auc <= 0, total_auc = 1; end % 避免除零
+        
+        half_auc = total_auc / 2;
+        mttIdx = find(cumulative_auc >= half_auc, 1, 'first');
+        if isempty(mttIdx), MTT = TMAX; else, MTT = time(mttIdx); end
+        
         halfMaxVal = baseline + (maxVal - baseline) / 2;
         halfMaxIdx = find(curve(1:maxIdx) >= halfMaxVal, 1, 'first');
-        if isempty(halfMaxIdx)
-            halfTMAX = TU;
-        else
-            halfTMAX = time(halfMaxIdx);
-        end
+        if isempty(halfMaxIdx), halfTMAX = TU; else, halfTMAX = time(halfMaxIdx); end
+        
         AUC = trapz(time, curve - baseline);
         AUCbefore = trapz(time(1:maxIdx), curve(1:maxIdx) - baseline);
-        AUCratio = AUCbefore / AUC;
-        dCurve = diff(curve) ./ diff(time);
-        timeRangeForSlope = (time >= TU) & (time <= TMAX);
-        timeRangeForSlope(end) = [];
-        if any(timeRangeForSlope)
-            MS = max(dCurve(timeRangeForSlope));
-        else
-            MS = max(dCurve);
-        end
-        curveValueAtTU = curve(tuIdx);
-        AFS = (maxVal - curveValueAtTU) / TD;
-        CBF = AUC / MTT;
+        AUCratio = AUCbefore / max(0.1, AUC);
+        
+        % AFS & CBF 保护
+        AFS = (maxVal - curve(tuIdx)) / TD;
+        CBF = AUC / max(0.1, MTT);
+        
         perfusionParams(lobe).TMAX = TMAX;
         perfusionParams(lobe).MTT = MTT;
         perfusionParams(lobe).TU = TU;

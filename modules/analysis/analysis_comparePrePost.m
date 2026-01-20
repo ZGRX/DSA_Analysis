@@ -84,14 +84,62 @@ analyzeBtn = uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
 
 uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
     'String', '导出对比结果', 'Units', 'normalized', ...
-    'Position', [0.8, 0.2, 0.15, 0.6], 'FontSize', 12, ...
+    'Position', [0.70, 0.2, 0.14, 0.6], 'FontSize', 12, ...
     'BackgroundColor', [0.8, 1, 0.8], ...
     'Callback', @exportComparison);
+
+uicontrol('Parent', btnPanel, 'Style', 'pushbutton', ...
+    'String', '科研数据集导出', 'Units', 'normalized', ...
+    'Position', [0.85, 0.2, 0.14, 0.6], 'FontSize', 11, ...
+    'BackgroundColor', [1, 0.9, 0.7], ...
+    'Callback', @appendResearchData);
 
 resultsPanel = uipanel(compFig, 'Title', '对比分析结果', ...
     'Position', [0.05, 0.05, 0.9, 0.8], ...
     'BackgroundColor', [1, 1, 1], ...
     'FontWeight', 'bold', 'FontSize', 12);
+
+% --- 科研数据集导出函数 ---
+    function appendResearchData(~,~)
+        compData = guidata(compFig);
+        if ~isfield(compData, 'increaseRatios') || isempty(compData.increaseRatios)
+            utils_showMessage('请先进行“分析对比”再导出科研数据！', 'error');
+            return;
+        end
+        
+        researchFile = fullfile(pwd, 'PatientData', 'Research_Dataset_Summary.xlsx');
+        try
+            lobeNames = {'Frontal', 'Parietal', 'Temporal', 'Occipital'};
+            patientID = 'Unknown';
+            if isfield(compData.preOpData, 'patientInfo'), patientID = compData.preOpData.patientInfo.id; end
+            
+            rows = cell(4, 7);
+            for i = 1:4
+                rows{i,1} = datestr(now, 'yyyy-mm-dd HH:MM');
+                rows{i,2} = patientID;
+                rows{i,3} = lobeNames{i};
+                rows{i,4} = compData.preOpData.perfusionParams(i).MS;
+                rows{i,5} = compData.postOpData.perfusionParams(i).MS;
+                rows{i,6} = compData.increaseRatios(i);
+                rows{i,7} = compData.riskLevels{i};
+            end
+            
+            newTable = cell2table(rows, 'VariableNames', ...
+                {'Timestamp', 'PatientID', 'Lobe', 'PreOp_MS', 'PostOp_MS', 'Increase_Ratio', 'RiskLevel'});
+            
+            if exist(researchFile, 'file')
+                oldTable = readtable(researchFile);
+                finalTable = [oldTable; newTable];
+            else
+                finalTable = newTable;
+            end
+            
+            writetable(finalTable, researchFile);
+            utils_showMessage('科研数据已成功追加至: Research_Dataset_Summary.xlsx', 'success');
+        catch ME
+            utils_showMessage('科研导出失败', 'error', ME.message);
+        end
+    end
 
 compData.preOpData = [];
 compData.postOpData = [];
