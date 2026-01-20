@@ -31,8 +31,7 @@ sections = {
     }}, ...
     {'结果与报告 / Result & Report', {
     {'🖼️ 显示参数图', @analysis_showResults, [0.65, 0.45, 0.85]}, ...
-    {'📊 术前术后对比', @analysis_comparePrePost, [0.92, 0.4, 0.4]}, ...
-    {'📤 导出报告', @io_exportData, [0.5, 0.5, 0.65]}
+    {' 导出报告', @io_exportData, [0.5, 0.5, 0.65]}
     }}, ...
     {'系统 / System', {
     {'🔄重置', @resetAll, [0.85, 0.3, 0.3]}, ...
@@ -74,8 +73,8 @@ for i = 1:length(sections)
     currentY = currentY - sectGap;
 end
 
-% 工作日志面板 (放置在底部，占据剩余空间)
-logHeight = 0.25;
+% 工作日志面板 (放置在底部，缩小高度)
+logHeight = 0.15;
 createWorkLogPanel(parent, 0.01, logHeight);
 end
 

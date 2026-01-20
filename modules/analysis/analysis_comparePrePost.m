@@ -147,6 +147,30 @@ compData.preOpFile = '';
 compData.postOpFile = '';
 guidata(compFig, compData);
 
+% === 自动加载传入的文件 ===
+if nargin >= 2 && ischar(varargin{1}) && ischar(varargin{2})
+    try
+        f1 = varargin{1};
+        f2 = varargin{2};
+        if exist(f1, 'file') && exist(f2, 'file')
+            d1 = load(f1);
+            d2 = load(f2);
+            compData = guidata(compFig);
+            compData.preOpData = d1.data;
+            compData.postOpData = d2.data;
+            [~, n1, e1] = fileparts(f1);
+            [~, n2, e2] = fileparts(f2);
+            compData.preOpFile = [n1, e1];
+            compData.postOpFile = [n2, e2];
+            guidata(compFig, compData);
+            set(analyzeBtn, 'Enable', 'on');
+            utils_showMessage('已自动加载选中的两个文件，请点击“分析对比”', 'success');
+        end
+    catch ME
+        utils_showMessage('自动加载对比文件失败', 'error', ME.message);
+    end
+end
+
     function importPreOpData(~,~)
         % 默认从Results目录读取
         baseDir = pwd;
