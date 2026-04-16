@@ -1,0 +1,91 @@
+{
+  "method": "DTI Feature + LOO Cross-Validation",
+  "classifier": "Threshold-based CHS Classifier (ΔTTP + AUC Ratio)",
+  "note": "BiLSTM框架已实现，本验证使用血流动力学特征分类器作为基准验证。",
+  "n_patients": 10,
+  "metrics": {
+    "accuracy_pct": 80.0,
+    "sensitivity_pct": 0.0,
+    "specificity_pct": 100.0,
+    "precision_pct": 0.0,
+    "auc_roc": 0.094
+  },
+  "confusion_matrix": {
+    "TP": 0,
+    "TN": 8,
+    "FP": 0,
+    "FN": 2
+  },
+  "per_patient": [
+    {
+      "patient": "DSA_P001",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P002",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.161,
+      "source": "synthetic"
+    },
+    {
+      "patient": "DSA_P003",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P004",
+      "true": "CHS",
+      "pred": "Normal",
+      "chs_prob": 0.05,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P005",
+      "true": "CHS",
+      "pred": "Normal",
+      "chs_prob": 0.152,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P006",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P007",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.05,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P008",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P009",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    },
+    {
+      "patient": "DSA_P010",
+      "true": "Normal",
+      "pred": "Normal",
+      "chs_prob": 0.4,
+      "source": "real"
+    }
+  ]
+}

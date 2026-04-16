@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1000.8pt" height="712.27625pt" viewBox="0 0 1000.8 712.27625" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-04-06T11:48:54.170324</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.8, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 712.27625 
+L 1000.8 712.27625 
+L 1000.8 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 56.52 675.00233 
+L 944.28 675.00233 
+Q 958.371429 675.00233 958.371429 662.972761 
+L 958.371429 85.553489 
+Q 958.371429 73.52392 944.28 73.52392 
+L 56.52 73.52392 
+Q 42.428571 73.52392 42.428571 85.553489 
+L 42.428571 662.972761 
+Q 42.428571 675.00233 56.52 675.00233 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #fafafa; stroke: #9e9e9e; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 14px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #616161" x="500.4" y="656.001787" transform="rotate(-0 500.4 656.001787)">工程支撑层 ‖ 全流程独立可插拔微服务架构 ‖ HIPAA级患者敏感信息清洗 ‖ LOO交叉验证评估保障</text>
+   </g>
+   <g id="patch_3">
+    <path d="M 123.454286 211.863955 
+L 877.345714 211.863955 
+Q 887.914286 211.863955 887.914286 202.841778 
+L 887.914286 124.649585 
+Q 887.914286 115.627409 877.345714 115.627409 
+L 123.454286 115.627409 
+Q 112.885714 115.627409 112.885714 124.649585 
+L 112.885714 202.841778 
+Q 112.885714 211.863955 123.454286 211.863955 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #e0f2f1; stroke: #00695c; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 123.454286 452.455318 
+L 877.345714 452.455318 
+Q 887.914286 452.455318 887.914286 443.433142 
+L 887.914286 305.093108 
+Q 887.914286 296.070932 877.345714 296.070932 
+L 123.454286 296.070932 
+Q 112.885714 296.070932 112.885714 305.093108 
+L 112.885714 443.433142 
+Q 112.885714 452.455318 123.454286 452.455318 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #e3f2fd; stroke: #1565c0; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 123.454286 614.854489 
+L 877.345714 614.854489 
+Q 887.914286 614.854489 887.914286 605.832312 
+L 887.914286 515.610551 
+Q 887.914286 506.588375 877.345714 506.588375 
+L 123.454286 506.588375 
+Q 112.885714 506.588375 112.885714 515.610551 
+L 112.885714 605.832312 
+Q 112.885714 614.854489 123.454286 614.854489 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #fff3e0; stroke: #e65100; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #212121" x="500.4" y="144.754905" transform="rotate(-0 500.4 144.754905)">医师操作层 (导管室原工作站，无硬件改造)</text>
+   </g>
+   <g id="line2d_1">
+    <path d="M 148.114286 163.745682 
+L 852.685714 163.745682 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #00695c; stroke-opacity: 0.3; stroke-linecap: square"/>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #212121" x="500.4" y="325.286318" transform="rotate(-0 500.4 325.286318)">信号处理层 (MATLAB高性能计算引擎)</text>
+   </g>
+   <g id="line2d_2">
+    <path d="M 148.114286 344.189205 
+L 852.685714 344.189205 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #1565c0; stroke-opacity: 0.3; stroke-linecap: square"/>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 15px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #212121" x="500.4" y="535.920949" transform="rotate(-0 500.4 535.920949)">AI决策层 (Python智能推理端)</text>
+   </g>
+   <g id="line2d_3">
+    <path d="M 148.114286 554.706648 
+L 852.685714 554.706648 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #e65100; stroke-opacity: 0.3; stroke-linecap: square"/>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 20px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #1a237e" x="500.4" y="23.45" transform="rotate(-0 500.4 23.45)">第28届中国机器人与人工智能大赛：DSA围术期脑微循环智能预警系统架构</text>
+   </g>
+   <g id="patch_6">
+    <path d="M 155.16 199.834386 
+L 338.348571 199.834386 
+Q 345.394286 199.834386 345.394286 193.819602 
+L 345.394286 169.760466 
+Q 345.394286 163.745682 338.348571 163.745682 
+L 155.16 163.745682 
+Q 148.114286 163.745682 148.114286 169.760466 
+L 148.114286 193.819602 
+Q 148.114286 199.834386 155.16 199.834386 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #b2dfdb; stroke: #00695c; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 394.714286 199.834386 
+L 577.902857 199.834386 
+Q 584.948571 199.834386 584.948571 193.819602 
+L 584.948571 169.760466 
+Q 584.948571 163.745682 577.902857 163.745682 
+L 394.714286 163.745682 
+Q 387.668571 163.745682 387.668571 169.760466 
+L 387.668571 193.819602 
+Q 387.668571 199.834386 394.714286 199.834386 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #b2dfdb; stroke: #00695c; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 634.268571 199.834386 
+L 845.64 199.834386 
+Q 852.685714 199.834386 852.685714 193.819602 
+L 852.685714 169.760466 
+Q 852.685714 163.745682 845.64 163.745682 
+L 634.268571 163.745682 
+Q 627.222857 163.745682 627.222857 169.760466 
+L 627.222857 193.819602 
+Q 627.222857 199.834386 634.268571 199.834386 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #b2dfdb; stroke: #00695c; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 141.068571 440.42575 
+L 289.028571 440.42575 
+Q 296.074286 440.42575 296.074286 434.410966 
+L 296.074286 380.277909 
+Q 296.074286 374.263125 289.028571 374.263125 
+L 141.068571 374.263125 
+Q 134.022857 374.263125 134.022857 380.277909 
+L 134.022857 434.410966 
+Q 134.022857 440.42575 141.068571 440.42575 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #bbdefb; stroke: #1565c0; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 331.302857 440.42575 
+L 479.262857 440.42575 
+Q 486.308571 440.42575 486.308571 434.410966 
+L 486.308571 380.277909 
+Q 486.308571 374.263125 479.262857 374.263125 
+L 331.302857 374.263125 
+Q 324.257143 374.263125 324.257143 380.277909 
+L 324.257143 434.410966 
+Q 324.257143 440.42575 331.302857 440.42575 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #bbdefb; stroke: #1565c0; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 521.537143 440.42575 
+L 669.497143 440.42575 
+Q 676.542857 440.42575 676.542857 434.410966 
+L 676.542857 380.277909 
+Q 676.542857 374.263125 669.497143 374.263125 
+L 521.537143 374.263125 
+Q 514.491429 374.263125 514.491429 380.277909 
+L 514.491429 434.410966 
+Q 514.491429 440.42575 521.537143 440.42575 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #bbdefb; stroke: #1565c0; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 711.771429 440.42575 
+L 859.731429 440.42575 
+Q 866.777143 440.42575 866.777143 434.410966 
+L 866.777143 380.277909 
+Q 866.777143 374.263125 859.731429 374.263125 
+L 711.771429 374.263125 
+Q 704.725714 374.263125 704.725714 380.277909 
+L 704.725714 434.410966 
+Q 704.725714 440.42575 711.771429 440.42575 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #bbdefb; stroke: #1565c0; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 148.114286 602.82492 
+L 472.217143 602.82492 
+Q 479.262857 602.82492 479.262857 596.810136 
+L 479.262857 560.721432 
+Q 479.262857 554.706648 472.217143 554.706648 
+L 148.114286 554.706648 
+Q 141.068571 554.706648 141.068571 560.721432 
+L 141.068571 596.810136 
+Q 141.068571 602.82492 148.114286 602.82492 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #ffe0b2; stroke: #d84315; stroke-width: 1.5; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 528.582857 602.82492 
+L 852.685714 602.82492 
+Q 859.731429 602.82492 859.731429 596.810136 
+L 859.731429 560.721432 
+Q 859.731429 554.706648 852.685714 554.706648 
+L 528.582857 554.706648 
+Q 521.537143 554.706648 521.537143 560.721432 
+L 521.537143 596.810136 
+Q 521.537143 602.82492 528.582857 602.82492 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #f5f5f5; stroke-dasharray: 7.4,3.2; stroke-dashoffset: 0; stroke: #6d4c41; stroke-width: 2; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #00695c" x="246.754286" y="185.868159" transform="rotate(-0 246.754286 185.868159)">DICOM序列导入</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #00695c" x="486.308571" y="185.844722" transform="rotate(-0 486.308571 185.844722)">术中分析帧段截取</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #00695c" x="739.954286" y="185.891597" transform="rotate(-0 739.954286 185.891597)">近远端ROI选取 (系统AI辅助寻边)</text>
+   </g>
+   <g id="patch_15">
+    <path d="M 354.438809 181.790034 
+Q 366.531991 181.790034 376.958506 181.790034 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #00695c; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 364.958506 172.790034 
+L 376.958506 181.790034 
+L 364.958506 190.790034 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #00695c; stroke: #00695c; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_16">
+    <path d="M 593.993094 181.790034 
+Q 606.086276 181.790034 616.512792 181.790034 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #00695c; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 604.512792 172.790034 
+L 616.512792 181.790034 
+L 604.512792 190.790034 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #00695c; stroke: #00695c; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(158.048571 404.963187)">① 多帧弹性动态配准</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(155.048571 418.163187)">(亚像素运动伪影消除)</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(345.282857 405.047562)">② PCHIP三次分段插值</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(336.282857 418.078812)">(TDC时序单调高保真重构)</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(541.517143 404.991312)">③ SVD自适应反卷积</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(532.517143 418.135062)">(剥离AIF动脉卷积污染)</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(734.751429 404.991312)">④ CC-DSA灌注图谱</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #1565c0" transform="translate(725.751429 418.135062)">(全脑时空可视化输出)</text>
+   </g>
+   <g id="patch_17">
+    <path d="M 301.596812 407.344437 
+Q 310.163354 407.344437 317.06323 407.344437 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 305.06323 398.344437 
+L 317.06323 407.344437 
+L 305.06323 416.344437 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #1565c0; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 491.831097 407.344437 
+Q 500.39764 407.344437 507.297516 407.344437 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 495.297516 398.344437 
+L 507.297516 407.344437 
+L 495.297516 416.344437 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #1565c0; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_19">
+    <path d="M 682.065383 407.344437 
+Q 690.631926 407.344437 697.531802 407.344437 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+    <path d="M 685.531802 398.344437 
+L 697.531802 407.344437 
+L 685.531802 416.344437 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #1565c0; stroke: #1565c0; stroke-width: 2; stroke-linecap: round"/>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #d84315" transform="translate(193.165714 576.107972)">[当前主推理引擎] 机制引导双核心指标模型</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #d84315" transform="translate(196.165714 589.532972)">(基于 ΔTTP 与 AUC_ratio 联合异常判定)</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #6d4c41" transform="translate(597.634286 576.018909)">[架构演进点] BiLSTM深度时序模型</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #6d4c41" transform="translate(564.634286 589.387659)">(代码架构已完成开发，待多中心海量数据激活)</text>
+   </g>
+   <g id="patch_20">
+    <path d="M 500.4 213.865823 
+Q 500.4 253.96866 500.4 291.988164 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #00695c; stroke-width: 2.5; stroke-linecap: round"/>
+    <path d="M 509.4 279.988164 
+L 500.4 291.988164 
+L 491.4 279.988164 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #00695c; stroke: #00695c; stroke-width: 2.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 394.714286 265.997011 
+L 606.085714 265.997011 
+L 606.085714 241.937875 
+L 394.714286 241.937875 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #fafafa; stroke: #fafafa; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 500.4 454.45425 
+Q 500.4 479.520569 500.4 502.503555 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #1565c0; stroke-width: 2.5; stroke-linecap: round"/>
+    <path d="M 509.4 490.503555 
+L 500.4 502.503555 
+L 491.4 490.503555 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #1565c0; stroke: #1565c0; stroke-width: 2.5; stroke-linecap: round"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 324.257143 491.551415 
+L 676.542857 491.551415 
+L 676.542857 467.492278 
+L 324.257143 467.492278 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #fafafa; stroke: #fafafa; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 893.435951 560.721432 
+Q 898.482908 560.721432 901.029864 560.721432 
+" clip-path="url(#pe6c23f4d0d)" style="fill: none; stroke: #d84315; stroke-width: 3; stroke-linecap: round"/>
+    <path d="M 889.029864 551.721432 
+L 901.029864 560.721432 
+L 889.029864 569.721432 
+z
+" clip-path="url(#pe6c23f4d0d)" style="fill: #d84315; stroke: #d84315; stroke-width: 3; stroke-linecap: round"/>
+   </g>
+   <g id="text_15">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #00695c" x="500.4" y="258.045568" transform="rotate(-0 500.4 258.045568)">真实手术多帧DICOM序列</text>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; text-anchor: middle; fill: #1565c0" x="500.4" y="483.646847" transform="rotate(-0 500.4 483.646847)">全分辨率逐像素8维特征库 (标准化接口安全隔离点)</text>
+   </g>
+   <g id="text_17">
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #d84315" transform="translate(906.188571 551.744869)">临床预后</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #d84315" transform="translate(906.188571 564.776119)">CHS 风险</text>
+    <text style="font-weight: 700; font-size: 12px; font-family: 'SimHei', sans-serif; fill: #d84315" transform="translate(900.188571 577.807369)">置信度评分</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pe6c23f4d0d">
+   <rect x="7.2" y="43.45" width="986.4" height="661.62625"/>
+  </clipPath>
+ </defs>
+</svg>
