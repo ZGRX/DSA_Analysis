@@ -44,7 +44,6 @@ function analysis_extractAndAnalyze(varargin)
         return;
     end
     
-    % 全部成功
+    % 全部成功（参数表已在 analysis_analyzeCurves 内部刷新）
     log_updateStatus('TDC提取与分析完成');
-    updateParamTable();
 end

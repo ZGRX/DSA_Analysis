@@ -74,20 +74,17 @@ function resetUIControls(fig)
     if ishandle(riskResultText), set(riskResultText, 'String', '未评估', 'ForegroundColor', [1, 1, 0]); end
     
     if ishandle(paramTable)
-        paramNames = {'TMAX 达峰(s)', 'MTT 平均(s)', 'TU 到达(s)', 'FWHM 展宽(s)', 'AUC 流量', 'Peak 峰宽'};
-        roiColumns = {'近端(Proximal)', '远端(Distal)'};
-        tableData = cell(length(paramNames), length(roiColumns) + 1);
-        % 第一列为参数名
+        paramNames = {'TTP 达峰(s)', 'MTT 平均(s)', 'TU 到达(s)', 'FWHM 展宽(s)', 'AUC 流量', 'Peak 峰值', 'WFD 波形失真', 'TTS 时移(s)'};
+        tableData = cell(length(paramNames), 3);
         tableData(:,1) = paramNames';
         for i = 1:length(paramNames)
-            for j = 1:length(roiColumns)
-                tableData{i,j+1} = '--';
-            end
+            tableData{i,2} = '--';
+            tableData{i,3} = '--';
         end
         set(paramTable, 'Data', tableData);
         set(paramTable, 'ColumnName', {'参数指标', '近端(Proximal)', '远端(Distal)'});
         set(paramTable, 'RowName', []);
-        set(paramTable, 'ColumnWidth', {110, 80, 80});
+        set(paramTable, 'ColumnWidth', {120, 85, 90});
         set(paramTable, 'ColumnEditable', false);
     end
     

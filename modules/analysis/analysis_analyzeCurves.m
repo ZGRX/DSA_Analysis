@@ -73,6 +73,9 @@ try
     data.analysisInfo.DTW_Distance = dtwDist; % 顺便存入供导出
     guidata(fig, data);
     
+    % 同步更新主界面灌注参数表
+    updateParamTable();
+    
     showPerfusionParams(perfusionParams, data.roiNames, dtwDist);
     log_updateStatus('双端曲线拟合成功 (含DTW计算)');
 catch ME

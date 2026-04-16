@@ -442,11 +442,16 @@ end
 
 updateStatus(dlg, sprintf('正在加载: %s%s ...', name, ext));
 
+% ── 先校验主窗口，找不到则中止 ──────────────────────────────
+if isempty(mainFig) || ~ishandle(mainFig)
+    updateStatus(dlg, '错误: 未找到主窗口，请先打开DSA主界面');
+    msgbox('未找到DSA主界面窗口，请先启动主系统再加载文件。', '错误', 'error');
+    return;
+end
+
 % 关闭文件管理器对话框，切换到主窗口
 close(dlg);
-if ~isempty(mainFig) && ishandle(mainFig)
-    figure(mainFig);
-end
+figure(mainFig);
 
 try
     % 根据类型处理
